@@ -1,0 +1,44 @@
+.header {
+  display: flex;
+  justify-content: center;
+  background-color: var(--background);
+}
+
+.nav {
+  max-width: 1280px;
+  width: 100%;
+  position: relative;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: max-content max-content 1fr;
+  list-style-type: none;
+
+}
+
+.active-tab {
+
+}
+
+.link {
+  color: #F2F2F3;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.item {
+
+}
+
+.item_type_logo {
+  position: absolute;
+  justify-self: center;
+}
+
+.item_pos_left {
+  justify-self: flex-end;
+}

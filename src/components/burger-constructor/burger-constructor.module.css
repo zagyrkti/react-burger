@@ -1,0 +1,32 @@
+
+.burgerConstructor {
+  display: flex;
+  flex-direction: column;
+}
+
+.constructedBurger {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.innerIngredients {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 464px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.innerIngredient {
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
