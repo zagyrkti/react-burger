@@ -1,9 +1,10 @@
 import React from "react";
-import {Counter, CurrencyIcon, Tab} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import ingredientShape from '../../utils/proptypes'
 import PropTypes from "prop-types";
+import IngredientCard from "../ingredient-card/ingredient-card";
 
 function BurgerIngredients(props) {
   const [current, setCurrent] = React.useState('one')
@@ -47,17 +48,9 @@ function BurgerIngredients(props) {
             <div className={`${styles.ingredientsSubtypeList} pl-4`}>
 
               {buns.map((item) =>
-                  <div className={`${styles.ingredientCard} mt-6`} key={item._id}
-                       onClick={(event) => handleIngredientClick(event, item)}
-                  >
-                    <Counter count={1} size="default"/>
-                    <img src={item.image} alt="" className={`${styles.ingredientImage} pl-4 pr-4`}/>
-                    <div className={`${styles.price} mt-1`}>
-                      <span className="text text_type_digits-default mr-2">{item.price}</span>
-                      <CurrencyIcon type="primary"/>
-                    </div>
-                    <p className={`${styles.ingredientName} mt-2 text text_type_main-default`}>{item.name}</p>
-                  </div>
+                  <IngredientCard key={item._id} ingredient={item}
+                                  onClick={handleIngredientClick}
+                  />
               )}
 
             </div>
@@ -68,17 +61,9 @@ function BurgerIngredients(props) {
             <div className={`${styles.ingredientsSubtypeList} pl-4`}>
 
               {sauce.map((item) =>
-                  <div className={`${styles.ingredientCard} mt-6`} key={item._id}
-                       onClick={(event) => handleIngredientClick(event, item)}
-                  >
-                    <Counter count={1} size="default"/>
-                    <img src={item.image} alt="" className={`${styles.ingredientImage} pl-4 pr-4`}/>
-                    <div className={`${styles.price} mt-1`}>
-                      <span className="text text_type_digits-default mr-2">{item.price}</span>
-                      <CurrencyIcon type="primary"/>
-                    </div>
-                    <p className={`${styles.ingredientName} mt-2 text text_type_main-default`}>{item.name}</p>
-                  </div>
+                <IngredientCard key={item._id} ingredient={item}
+                                onClick={handleIngredientClick}
+                />
               )}
 
             </div>
@@ -89,17 +74,9 @@ function BurgerIngredients(props) {
             <div className={`${styles.ingredientsSubtypeList} pl-4`}>
 
               {main.map((item) =>
-                  <div className={`${styles.ingredientCard} mt-6`} key={item._id}
-                       onClick={(event) => handleIngredientClick(event, item)}
-                  >
-                    <Counter count={1} size="default"/>
-                    <img src={item.image} alt="" className={`${styles.ingredientImage} pl-4 pr-4`}/>
-                    <div className={`${styles.price} mt-1`}>
-                      <span className="text text_type_digits-default mr-2">{item.price}</span>
-                      <CurrencyIcon type="primary"/>
-                    </div>
-                    <p className={`${styles.ingredientName} mt-2 text text_type_main-default`}>{item.name}</p>
-                  </div>
+                  <IngredientCard key={item._id} ingredient={item}
+                                  onClick={handleIngredientClick}
+                  />
               )}
 
             </div>
@@ -116,10 +93,10 @@ function BurgerIngredients(props) {
 
 BurgerIngredients.propTypes = {
   ingredientData: PropTypes.shape({
-    buns: PropTypes.arrayOf(ingredientShape),
-    main: PropTypes.arrayOf(ingredientShape),
-    sauce: PropTypes.arrayOf(ingredientShape),
-  })
+    buns: PropTypes.arrayOf(ingredientShape).isRequired,
+    main: PropTypes.arrayOf(ingredientShape).isRequired,
+    sauce: PropTypes.arrayOf(ingredientShape).isRequired,
+  }).isRequired
 }
 
 export default BurgerIngredients;

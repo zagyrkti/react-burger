@@ -2,6 +2,9 @@ import React from "react";
 import styles from './order-details.module.css'
 import Modal from "../modal/modal";
 import orderAccepted from '../../images/orderAccepted.gif'
+import ingredientShape from "../../utils/proptypes";
+import PropTypes from "prop-types";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 function OrderDetails(props) {
 
@@ -17,6 +20,10 @@ function OrderDetails(props) {
           </div>
       </Modal>
   )
+}
+
+IngredientDetails.propTypes = {
+  onClose:PropTypes.func.isRequired,
 }
 
 export default OrderDetails;

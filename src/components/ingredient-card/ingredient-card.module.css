@@ -1,0 +1,20 @@
+.ingredientCard {
+  position: relative;
+}
+
+.ingredientImage {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredientName {
+  text-align: center;
+  /*padding-bottom: 24px;*/
+  height: 48px;
+}

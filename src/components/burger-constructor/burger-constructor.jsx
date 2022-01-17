@@ -27,7 +27,7 @@ function BurgerConstructor(props) {
               <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={buns[0].name}
+                  text={`${buns[0].name} (верх)`}
                   price={buns[0].price}
                   thumbnail={buns[0].image}
               />
@@ -51,7 +51,7 @@ function BurgerConstructor(props) {
             <ConstructorElement
                 type="bottom"
                 isLocked={true}
-                text={buns[0].name}
+                text={`${buns[0].name} (низ)`}
                 price={buns[0].price}
                 thumbnail={buns[0].image}
             />
@@ -75,10 +75,10 @@ function BurgerConstructor(props) {
 
 BurgerIngredients.propTypes = {
   ingredientData: PropTypes.shape({
-    buns: PropTypes.arrayOf(ingredientShape),
-    main: PropTypes.arrayOf(ingredientShape),
-    sauce: PropTypes.arrayOf(ingredientShape),
-  })
+    buns: PropTypes.arrayOf(ingredientShape).isRequired,
+    main: PropTypes.arrayOf(ingredientShape).isRequired,
+    sauce: PropTypes.arrayOf(ingredientShape).isRequired,
+  }).isRequired
 }
 
 export default BurgerConstructor;

@@ -2,7 +2,7 @@
 /*дедлайн припекал, за 2 дня сделал что мог ))*/
 
 import React from 'react';
-import './App.css';
+import './app.module.css';
 import AppHeader from "../app-header/app-header";
 import {Route, Routes} from "react-router-dom";
 import {BrowserRouter} from "react-router-dom";
