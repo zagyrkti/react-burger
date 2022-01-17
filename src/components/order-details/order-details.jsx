@@ -2,7 +2,7 @@ import React from "react";
 import styles from './order-details.module.css'
 import orderAccepted from '../../images/orderAccepted.gif'
 
-function OrderDetails(props) {
+function OrderDetails() {
 
 
   return (

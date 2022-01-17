@@ -19,9 +19,11 @@ function Modal(props) {
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleCloseByEsc);
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener("keydown", handleCloseByEsc);
+      document.body.style.overflow = 'unset';
     }
   }, [handleCloseByEsc])
 
