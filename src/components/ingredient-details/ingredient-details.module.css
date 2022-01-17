@@ -1,0 +1,21 @@
+
+.ingredientDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  width: 640px;
+  height: 64px;
+  line-height: 64px;
+}
+
+.infoBlock {
+  display: flex;
+}
+
+.infoItem {
+  text-align: center;
+  min-width: 112px;
+}
