@@ -6,6 +6,7 @@ import OrderDetails from "../order-details/order-details";
 import PropTypes from "prop-types";
 import ingredientShape from "../../utils/proptypes";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import Modal from "../modal/modal";
 
 function BurgerConstructor(props) {
 
@@ -67,7 +68,10 @@ function BurgerConstructor(props) {
         </div>
 
         {modalState &&
-        <OrderDetails onClose={handleModal} />}
+        <Modal onClose={handleModal}>
+          <OrderDetails />
+        </Modal>
+        }
 
       </section>
   )

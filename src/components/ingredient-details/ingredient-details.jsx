@@ -1,13 +1,11 @@
-import Modal from "../modal/modal";
 import React from "react";
 import styles from './ingredient-details.module.css'
-import PropTypes from "prop-types";
 import ingredientShape from "../../utils/proptypes";
 
 function IngredientDetails(props) {
 
   return (
-      <Modal onClose={props.onClose}>
+      <>
 
         <div className={`${styles.ingredientDetails} pt-10 pl-10 pr-10 pb-15`}>
           <h2 className={`${styles.title} text text_type_main-large`}>Детали ингредиента</h2>
@@ -35,13 +33,12 @@ function IngredientDetails(props) {
 
         </div>
 
-      </Modal>
+      </>
   )
 }
 
 IngredientDetails.propTypes = {
-  ingredient: ingredientShape,
-  onClose:PropTypes.func,
+  ingredient: ingredientShape.isRequired,
 }
 
 export default IngredientDetails;

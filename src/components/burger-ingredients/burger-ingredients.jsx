@@ -5,6 +5,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import ingredientShape from '../../utils/proptypes'
 import PropTypes from "prop-types";
 import IngredientCard from "../ingredient-card/ingredient-card";
+import Modal from "../modal/modal";
 
 function BurgerIngredients(props) {
   const [current, setCurrent] = React.useState('one')
@@ -61,9 +62,9 @@ function BurgerIngredients(props) {
             <div className={`${styles.ingredientsSubtypeList} pl-4`}>
 
               {sauce.map((item) =>
-                <IngredientCard key={item._id} ingredient={item}
-                                onClick={handleIngredientClick}
-                />
+                  <IngredientCard key={item._id} ingredient={item}
+                                  onClick={handleIngredientClick}
+                  />
               )}
 
             </div>
@@ -85,7 +86,10 @@ function BurgerIngredients(props) {
         </div>
 
         {modalState &&
-        <IngredientDetails onClose={changeModalState} ingredient={clickedIngredient}/>}
+        <Modal onClose={changeModalState}>
+          <IngredientDetails ingredient={clickedIngredient}/>
+        </Modal>
+        }
 
       </section>
   )
