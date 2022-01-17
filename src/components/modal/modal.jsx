@@ -4,26 +4,27 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import React, {useCallback} from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import disableScroll from 'disable-scroll';
 
 const modalRoot = document.getElementById("modal");
 
 function Modal(props) {
 
-  const {onClose} = props;
+  const { onClose } = props;
 
   const handleCloseByEsc = useCallback((event) => {
     if (event.key === "Escape") {
       onClose();
     }
-  },[onClose])
+  }, [onClose])
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleCloseByEsc);
-    document.body.style.overflow = 'hidden';
+    disableScroll.on();
 
     return () => {
       document.removeEventListener("keydown", handleCloseByEsc);
-      document.body.style.overflow = 'unset';
+      disableScroll.off();
     }
   }, [handleCloseByEsc])
 
@@ -40,7 +41,7 @@ function Modal(props) {
 }
 
 Modal.propTypes = {
-  onClose:PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
 
 export default Modal;
