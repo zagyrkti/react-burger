@@ -10,10 +10,11 @@ function App() {
 
   const INGREDIENTS_URL = 'https://norma.nomoreparties.space/api/ingredients';
 
-  const [ingredientsData, setIngredientsData] = React.useState({buns:[], sauce: [], main: []})
+  const [ingredientsData, setIngredientsData] = React.useState({ buns: [], sauce: [], main: [] })
   const [burgerIngredients, setBurgerIngredients] = React.useState([]);
 
   const randomBurger = [];
+
   function randomIngredients(requiredAmount, ingredients) {
     for (let i = 0; i < requiredAmount; i++) {
       randomBurger.push(ingredients[Math.floor(Math.random() * ingredients.length)])
@@ -46,9 +47,8 @@ function App() {
     randomIngredients(4, main);
     setBurgerIngredients(randomBurger);
 
-    return {buns, sauce, main};
+    return { buns, sauce, main };
   }
-
 
 
   React.useEffect(() => {
@@ -70,10 +70,10 @@ function App() {
   return (
       <BrowserRouter>
         <BurgerConstructorContext.Provider value={burgerIngredients}>
-        <AppHeader/>
-        <Routes>
-          <Route path='/' element={<ConstructorPage ingredientsData={ingredientsData}/>}/>
-        </Routes>
+          <AppHeader/>
+          <Routes>
+            <Route path='/' element={<ConstructorPage ingredientsData={ingredientsData}/>}/>
+          </Routes>
         </BurgerConstructorContext.Provider>
       </BrowserRouter>
   );

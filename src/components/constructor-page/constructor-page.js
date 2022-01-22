@@ -14,7 +14,7 @@ function ConstructorPage(props) {
   return (
       <main className={styles.main}>
         {ingredientsDataExist && <BurgerIngredients ingredientData={props.ingredientsData}/>}
-        {ingredientsDataExist && <BurgerConstructor />}
+        {ingredientsDataExist && <BurgerConstructor/>}
       </main>
   )
 }
