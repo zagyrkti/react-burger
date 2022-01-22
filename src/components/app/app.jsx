@@ -1,18 +1,24 @@
-/*Приветствую*/
-/*дедлайн припекал, за 2 дня сделал что мог ))*/
-
 import React from 'react';
 import './app.module.css';
 import AppHeader from "../app-header/app-header";
 import {Route, Routes} from "react-router-dom";
 import {BrowserRouter} from "react-router-dom";
 import ConstructorPage from "../constructor-page/constructor-page";
+import BurgerConstructorContext from '../../contexts/burger-constructor-context';
 
 function App() {
 
   const INGREDIENTS_URL = 'https://norma.nomoreparties.space/api/ingredients';
 
   const [ingredientsData, setIngredientsData] = React.useState({buns:[], sauce: [], main: []})
+  const [burgerIngredients, setBurgerIngredients] = React.useState([]);
+
+  const randomBurger = [];
+  function randomIngredients(requiredAmount, ingredients) {
+    for (let i = 0; i < requiredAmount; i++) {
+      randomBurger.push(ingredients[Math.floor(Math.random() * ingredients.length)])
+    }
+  }
 
   const processIngredientsData = (data) => {
     const buns = [];
@@ -35,8 +41,15 @@ function App() {
       }
     })
 
+    randomIngredients(1, buns);
+    randomIngredients(2, sauce);
+    randomIngredients(4, main);
+    setBurgerIngredients(randomBurger);
+
     return {buns, sauce, main};
   }
+
+
 
   React.useEffect(() => {
     fetch(INGREDIENTS_URL)
@@ -53,12 +66,15 @@ function App() {
         .catch(console.log)
   }, [])
 
+
   return (
       <BrowserRouter>
+        <BurgerConstructorContext.Provider value={burgerIngredients}>
         <AppHeader/>
         <Routes>
           <Route path='/' element={<ConstructorPage ingredientsData={ingredientsData}/>}/>
         </Routes>
+        </BurgerConstructorContext.Provider>
       </BrowserRouter>
   );
 }
