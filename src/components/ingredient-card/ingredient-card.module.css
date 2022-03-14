@@ -1,10 +1,16 @@
 .ingredientCard {
   position: relative;
+  cursor: pointer;
 }
 
 .ingredientImage {
   width: 100%;
   box-sizing: border-box;
+  transition: opacity 0.25s;
+}
+
+.ingredientCard:hover .ingredientImage {
+  opacity: 0.85;
 }
 
 .price {

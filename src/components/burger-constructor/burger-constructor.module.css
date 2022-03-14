@@ -1,32 +1,86 @@
 
 .burgerConstructor {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .constructedBurger {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+
+    border-radius: 75px;
+}
+
+/*TODO придумать чтонибудь получше / скорректировать контейнер паддингами*/
+.constructedBurgerTargeted {
+    box-shadow: inset 0 0 32px 8px rgba(197, 51, 255, 0.25), inset 0 0 16px 8px rgba(51, 51, 255, 0.25);
 }
 
 .innerIngredients {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: 464px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+    width: 100%;
+    min-height: 176px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 464px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 20px;
+
 }
 
 .innerIngredient {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+}
+
+.bunWrapper {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
 }
 
 .info {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.callText {
+    margin: 75px 0 0 0;
+
+    font-family: 'Jet Brains Mono', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    text-align: center;
+
+}
+
+.placeholderBun {
+    display: flex;
+    padding: 16px 24px;
+    max-width: 488px;
+    min-height: 48px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Jet Brains Mono', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+
+    outline: 2px solid #2c2c2c;
+    border-radius: 88px 88px 40px 40px
+}
+
+.placeholderBunTypeTop {
+    border-radius: 88px 88px 40px 40px
+}
+
+.placeholderBunTypeBottom {
+    border-radius: 40px 40px 88px 88px
 }
