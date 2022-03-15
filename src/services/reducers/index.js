@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 import {
   ADD_BUN_TO_CONSTRUCTOR,
-  ADD_INGREDIENT_TO_SELECTED, ADD_TOPPING_TO_CONSTRUCTOR, CALCULATE_CONSTRUCTOR_TOTAL,
+  ADD_INGREDIENT_TO_SELECTED, ADD_TOPPING_TO_CONSTRUCTOR,
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
   PLACE_ORDER_FAILED,
   PLACE_ORDER_REQUEST,
   PLACE_ORDER_SUCCESS, REMOVE_INGREDIENT_FROM_CONSTRUCTOR, RESET_SELECTED_INGREDIENT,
-  SWITCH_INGREDIENT_DETAILS_MODAL_STATE, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER
+  SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER
 } from '../actions';
 
 const initialState = {
@@ -19,13 +19,12 @@ const initialState = {
   },
   IngredientDetails: {
     selectedIngredient: {},
-    isModalOpen: false,
   },
   order: {
     orderDetails: {
       name: '...loading',
       order: {
-        number: '....',
+        number: null,
       },
       success: false
     },
@@ -36,7 +35,6 @@ const initialState = {
   burgerConstructor: {
     bun: {},
     topping: [],
-    constructorTotal: 0,
   }
 }
 
@@ -67,17 +65,12 @@ const ingredients = (state = initialState.ingredients, action) => {
   }
 }
 
-const IngredientDetails = (state = initialState.IngredientDetails, action) => {
+const ingredientDetails = (state = initialState.IngredientDetails, action) => {
   switch (action.type) {
     case ADD_INGREDIENT_TO_SELECTED:
       return {
         ...state,
         selectedIngredient: action.payload,
-      }
-    case SWITCH_INGREDIENT_DETAILS_MODAL_STATE:
-      return {
-        ...state,
-        isModalOpen: !state.isModalOpen,
       }
     case RESET_SELECTED_INGREDIENT:
       return {
@@ -145,21 +138,6 @@ const burgerConstructor = (state = initialState.burgerConstructor, action) => {
         ...state,
         topping: action.payload,
       }
-    case CALCULATE_CONSTRUCTOR_TOTAL: {
-      const total = [...state.topping, state.bun].reduce((accumulator, item) => {
-        if (item.type === 'bun') {
-          return accumulator + item.price + item.price;
-        }
-        if (item.price) {
-          return accumulator + item.price
-        }
-        return 0
-      }, 0)
-      return {
-        ...state,
-        constructorTotal: total
-      }
-    }
     default:
       return state;
   }
@@ -167,7 +145,7 @@ const burgerConstructor = (state = initialState.burgerConstructor, action) => {
 
 const rootReducer = combineReducers({
   ingredients,
-  IngredientDetails,
+  ingredientDetails,
   order,
   burgerConstructor,
 });

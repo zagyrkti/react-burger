@@ -1,7 +1,7 @@
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import currencyIconBig from '../../images/Subtract.svg'
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { v4 as uuidv4 } from 'uuid';
@@ -9,8 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import ConstructorToppingCard from '../constructor-topping-card/constructor-topping-card';
 import {
-  ADD_BUN_TO_CONSTRUCTOR, ADD_TOPPING_TO_CONSTRUCTOR,
-  CALCULATE_CONSTRUCTOR_TOTAL, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+  ADD_BUN_TO_CONSTRUCTOR, ADD_TOPPING_TO_CONSTRUCTOR, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER
 } from '../../services/actions';
 
@@ -20,8 +19,6 @@ function BurgerConstructor() {
 
   const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
   const bun = useSelector((store) => store.burgerConstructor.bun);
-  const total = useSelector((store) => store.burgerConstructor.constructorTotal);
-
 
   const changeOderModalState = () => {
     dispatch({
@@ -44,7 +41,6 @@ function BurgerConstructor() {
     const idList = getIngredientsPropertyValues(constructorIngredients, bun, '_id')
     dispatch(placeOrderAction(idList));
   }
-
 
   const handleDeleteBtnClick = (uuid) => {
     dispatch({
@@ -92,14 +88,19 @@ function BurgerConstructor() {
     })
   });
 
-  useEffect(() => {
-    dispatch({
-      type: CALCULATE_CONSTRUCTOR_TOTAL
-    })
-  }, [constructorIngredients, bun])
-
-
   const constructedBurgerTargeted = isHover ? styles.constructedBurgerTargeted : '';
+
+  const total = useMemo(() => {
+    return [...constructorIngredients, bun].reduce((accumulator, item) => {
+      if (item.type === 'bun') {
+        return accumulator + item.price + item.price;
+      }
+      if (item.price) {
+        return accumulator + item.price
+      }
+      return 0
+    }, 0)
+  },[bun, constructorIngredients])
 
   return (
       <section className={`${styles.burgerConstructor} mt-20 pl-4`}>

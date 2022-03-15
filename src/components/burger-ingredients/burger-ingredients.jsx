@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
 import IngredientDetails from "../ingredient-details/ingredient-details";
@@ -8,15 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   ADD_INGREDIENT_TO_SELECTED,
   RESET_SELECTED_INGREDIENT,
-  SWITCH_INGREDIENT_DETAILS_MODAL_STATE
 } from '../../services/actions';
 
 function BurgerIngredients() {
   const dispatch = useDispatch();
 
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-  const modalState = useSelector((store) => store.IngredientDetails.isModalOpen);
-  const clickedIngredient = useSelector((store) => store.IngredientDetails.selectedIngredient)
+  const clickedIngredient = useSelector((store) => store.ingredientDetails.selectedIngredient)
 
   const [current, setCurrent] = React.useState('one')
 
@@ -46,9 +44,6 @@ function BurgerIngredients() {
 
   const handleIngredientDetailsClose = () => {
     dispatch({
-      type: SWITCH_INGREDIENT_DETAILS_MODAL_STATE
-    })
-    dispatch({
       type: RESET_SELECTED_INGREDIENT
     })
   }
@@ -58,41 +53,29 @@ function BurgerIngredients() {
       type: ADD_INGREDIENT_TO_SELECTED,
       payload: item,
     });
-    dispatch({
-      type: SWITCH_INGREDIENT_DETAILS_MODAL_STATE
-    })
   }
 
-  useEffect(() => {
-    const setNearestTab = () => {
+  const setNearestTab = () => {
 
-      const bunRect = bunRef.current?.getBoundingClientRect();
-      const sauceRect = sauceRef.current?.getBoundingClientRect();
-      const mainRect = mainRef.current?.getBoundingClientRect();
-      const containerRect = containerRef.current?.getBoundingClientRect();
+    const bunRect = bunRef.current?.getBoundingClientRect();
+    const sauceRect = sauceRef.current?.getBoundingClientRect();
+    const mainRect = mainRef.current?.getBoundingClientRect();
+    const containerRect = containerRef.current?.getBoundingClientRect();
 
-      if (Math.abs(containerRect.top - bunRect.top) < 140) {
-        setCurrent('one')
-        return;
-      }
-
-      if (Math.abs(containerRect.top - sauceRect.top) < 140) {
-        setCurrent('two')
-        return;
-      }
-
-      if (Math.abs(containerRect.top - mainRect.top) < 140) {
-        setCurrent('three')
-      }
+    if (Math.abs(containerRect.top - bunRect.top) < 140) {
+      setCurrent('one')
+      return;
     }
 
-    containerRef.current.addEventListener("scroll", setNearestTab);
+    if (Math.abs(containerRect.top - sauceRect.top) < 140) {
+      setCurrent('two')
+      return;
+    }
 
-    return () => {
-      containerRef.current.removeEventListener('scroll', setNearestTab)
-    };
-
-  }, [containerRef])
+    if (Math.abs(containerRect.top - mainRect.top) < 140) {
+      setCurrent('three')
+    }
+  }
 
   const ingredientsCards = useMemo(() => {
     const buns = [];
@@ -130,7 +113,7 @@ function BurgerIngredients() {
 
   return (
       <section className={styles.ingredients}>
-        <h2 className="text text_type_main-large mt-10">Соберите бургер</h2>
+        <h1 className="text text_type_main-large mt-10">Соберите бургер</h1>
         <div className={`${styles.tabs} mt-5 mb-10`}>
           <Tab value="one" active={current === 'one'} onClick={handleTabClick}>
             Булки
@@ -143,7 +126,7 @@ function BurgerIngredients() {
           </Tab>
         </div>
 
-        <div className={`${styles.ingredientsList} custom-scroll pr-2`} ref={containerRef}>
+        <div className={`${styles.ingredientsList} custom-scroll pr-2`} ref={containerRef} onScroll={setNearestTab}>
           <div className={`${styles.ingredientsSubtype} mb-10`} ref={bunRef}>
             <h2 className="text text_type_main-medium">Булки</h2>
             <div className={`${styles.ingredientsSubtypeList} pl-4`}>
@@ -166,7 +149,7 @@ function BurgerIngredients() {
           </div>
         </div>
 
-        {modalState &&
+        {clickedIngredient.name &&
             <Modal onClose={handleIngredientDetailsClose}>
               <IngredientDetails ingredient={clickedIngredient} />
             </Modal>

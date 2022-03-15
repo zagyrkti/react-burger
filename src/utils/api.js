@@ -1,9 +1,7 @@
-const ORDER_URL = 'https://norma.nomoreparties.space/api/orders';
-const INGREDIENTS_URL = 'https://norma.nomoreparties.space/api/ingredients';
-
+const API_URL = 'https://norma.nomoreparties.space/api/';
 
 const orderBurger = (burgerIngredientsId) => {
-  return fetch(ORDER_URL, {
+  return fetch(`${API_URL}orders`, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json'
@@ -21,7 +19,7 @@ const orderBurger = (burgerIngredientsId) => {
 }
 
 const getIngredients = () => {
-  return fetch(INGREDIENTS_URL)
+  return fetch(`${API_URL}ingredients`)
       .then((res) => {
         if (res.ok) {
           return res.json();

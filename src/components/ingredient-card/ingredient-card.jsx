@@ -1,5 +1,5 @@
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import styles from './ingredient-card.module.css';
 import PropTypes from "prop-types";
 import ingredientShape from "../../utils/proptypes";
@@ -11,9 +11,6 @@ function IngredientCard(props) {
   const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
   const constructorBun = useSelector((store) => store.burgerConstructor.bun);
 
-  const [counter, setCounter] = useState(0)
-
-
   const [{ isDragging }, dragRef] = useDrag({
     type: "ingredient",
     item: { ingredient },
@@ -22,12 +19,12 @@ function IngredientCard(props) {
     })
   });
 
-  useEffect(() => {
+  const counter = useMemo(() => {
     const ingredientInstancesInConstructor = [...constructorIngredients, constructorBun]
-            .filter((constructorIngredient) => ingredient._id === constructorIngredient._id);
+        .filter((constructorIngredient) => ingredient._id === constructorIngredient._id)
 
-    setCounter(ingredientInstancesInConstructor.length)
-  }, [constructorIngredients, constructorBun])
+    return ingredientInstancesInConstructor.length
+  },[constructorIngredients, constructorBun, ingredient._id]);
 
   return (
       <div className={`${styles.ingredientCard} mt-6`}
