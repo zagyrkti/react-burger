@@ -1,0 +1,13 @@
+.innerIngredient {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.innerIngredientDragging {
+    opacity: 0;
+}
+
+.innerIngredientHover {
+    background-color: green;
+}

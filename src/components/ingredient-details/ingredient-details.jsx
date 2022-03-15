@@ -9,7 +9,7 @@ function IngredientDetails(props) {
 
         <div className={`${styles.ingredientDetails} pt-10 pl-10 pr-10 pb-15`}>
           <h2 className={`${styles.title} text text_type_main-large`}>Детали ингредиента</h2>
-          <img src={props.ingredient.image_large} alt=""/>
+          <img src={props.ingredient.image_large} className={styles.img} alt=""/>
           <p className="text text_type_main-medium mt-4">{props.ingredient.name}</p>
 
           <div className={`${styles.infoBlock} mt-8`}>

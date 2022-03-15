@@ -1,30 +1,19 @@
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import styles from './constructor-page.module.css';
-import PropTypes from "prop-types";
-import ingredientShape from "../../utils/proptypes";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-function ConstructorPage(props) {
-
-  const ingredientsDataExist =
-      props.ingredientsData.main.length
-      && props.ingredientsData.buns.length
-      && props.ingredientsData.sauce.length;
+function ConstructorPage() {
 
   return (
       <main className={styles.main}>
-        {ingredientsDataExist && <BurgerIngredients ingredientData={props.ingredientsData}/>}
-        {ingredientsDataExist && <BurgerConstructor/>}
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
   )
-}
-
-BurgerIngredients.propTypes = {
-  ingredientData: PropTypes.shape({
-    buns: PropTypes.arrayOf(ingredientShape),
-    main: PropTypes.arrayOf(ingredientShape),
-    sauce: PropTypes.arrayOf(ingredientShape),
-  })
 }
 
 export default ConstructorPage;
