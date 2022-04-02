@@ -27,7 +27,7 @@ function AppHeader() {
               </Link>
             </li>
             <li className={styles.item_pos_left}>
-              <Link to={'/'} className={`${styles.link}  pt-4 pb-4 pl-5 pr-5`}>
+              <Link to={'/profile'} className={`${styles.link}  pt-4 pb-4 pl-5 pr-5`}>
                 <ProfileIcon type="secondary"/>
                 <span className="text text_type_main-default text_color_inactive ml-2">Личный кабинет</span>
               </Link>

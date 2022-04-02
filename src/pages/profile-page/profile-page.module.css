@@ -1,0 +1,53 @@
+.main {
+    max-width: 1240px;
+    margin: 0 auto 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.profile {
+    margin: 120px 0 0 0;
+    width: 100%;
+    display: flex;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    width: 100%;
+}
+
+.link {
+    height: 64px;
+    padding: 16px 0 16px 0;
+    box-sizing: border-box;
+
+    text-decoration: none;
+}
+
+.remark {
+    opacity: 0.4;
+    white-space: break-spaces;
+}
+
+.userData {
+    max-width: 480px;
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.inputWrapper {
+
+}
+
+.inputWrapper div:first-child{
+    max-width: 480px;
+    width: 100%;
+}

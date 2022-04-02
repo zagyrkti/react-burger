@@ -1,0 +1,26 @@
+.main {
+    max-width: 1240px;
+    margin: 0 auto 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registration {
+    margin: 200px 0 0 0;
+    max-width: 480px;
+    width: 100%;
+
+    text-align: center;
+}
+
+.inputWrapper {
+
+}
+
+.inputWrapper div:first-child{
+    max-width: 480px;
+    width: 100%;
+}
+

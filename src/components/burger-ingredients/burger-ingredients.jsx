@@ -151,7 +151,7 @@ function BurgerIngredients() {
 
         {clickedIngredient.name &&
             <Modal onClose={handleIngredientDetailsClose}>
-              <IngredientDetails ingredient={clickedIngredient} />
+              <IngredientDetails/>
             </Modal>
         }
 
