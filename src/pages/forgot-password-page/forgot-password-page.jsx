@@ -12,6 +12,8 @@ function ForgotPasswordPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
+
   const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const forgotPasswordFormInitialState = {
@@ -20,8 +22,16 @@ function ForgotPasswordPage() {
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(forgotPasswordFormInitialState);
 
+  const checkValidity = () => {
+
+  }
+
   const handlePasswordRecovery = async (event) => {
     event.preventDefault();
+    if(!isValid) {
+      return;
+    }
+
     dispatch(forgotPasswordAction(values.email));
   }
 
@@ -33,19 +43,22 @@ function ForgotPasswordPage() {
 
   return (
       <Registration>
-        <form onSubmit={handlePasswordRecovery}>
+        <form onSubmit={handlePasswordRecovery} noValidate>
           <h1 className="text text_type_main-medium">Восстановление пароля</h1>
           <div className={`mt-6 ${registrationStyles.inputWrapper}`}>
-            <Input type={'text'}
+            <Input type={'email'}
                    placeholder={'Укажите e-mail'}
                    onChange={handleChange}
                    value={values.email}
                    name={'email'}
                    size={'default'}
+                   errorText={errors.email}
+                   error={!isValid}
+
             />
           </div>
           <div className='mt-6'>
-            <Button type="primary" size="medium">Восстановить</Button>
+            <Button type="primary" size="medium" disabled={!isValid}>Восстановить</Button>
           </div>
 
           <RedirectCall className='mt-20'
