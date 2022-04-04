@@ -6,9 +6,11 @@ import RedirectCall from '../../components/redirect-call/redirect-call';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { resetPasswordAction } from '../../services/actions';
+import { useNavigate } from 'react-router-dom';
 
 function ResetPasswordPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const resetPasswordFormInitialState = {
     password: '',
@@ -22,6 +24,7 @@ function ResetPasswordPage() {
   const handlePasswordReset = (event) => {
     event.preventDefault();
     dispatch(resetPasswordAction(values))
+    navigate('/login')
   }
 
   const handleIconClick = () => {
