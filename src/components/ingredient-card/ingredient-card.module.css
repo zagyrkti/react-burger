@@ -1,6 +1,7 @@
 .ingredientCard {
   position: relative;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .ingredientImage {

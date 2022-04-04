@@ -3,8 +3,12 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
+import { useDispatch } from 'react-redux';
+import { registerUserAction } from '../../services/actions';
 
 function RegisterPage() {
+  const dispatch = useDispatch();
+
   const registerFormInitialState = {
     name: '',
     email: '',
@@ -15,6 +19,7 @@ function RegisterPage() {
 
   const handleRegister = (event) => {
     event.preventDefault();
+    dispatch(registerUserAction(values));
   }
 
   return (

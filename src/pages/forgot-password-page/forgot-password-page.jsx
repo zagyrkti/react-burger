@@ -3,8 +3,12 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
+import { useDispatch } from 'react-redux';
+import { forgotPasswordAction } from '../../services/actions';
 
 function ForgotPasswordPage() {
+  const dispatch = useDispatch();
+
   const forgotPasswordFormInitialState = {
     email: '',
   }
@@ -13,6 +17,7 @@ function ForgotPasswordPage() {
 
   const handlePasswordRecovery = (event) => {
     event.preventDefault();
+    dispatch(forgotPasswordAction(values.email));
   }
 
   return (

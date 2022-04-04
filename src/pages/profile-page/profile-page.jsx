@@ -1,14 +1,17 @@
 import styles from './profile-page.module.css';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Route, Routes } from "react-router-dom";
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import useForm from '../../utils/useForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserDataAction, logoutUserAction, updateTokenAction, updateUserDataAction } from '../../services/actions';
+import { getCookie } from '../../utils/cookies-auxiliary';
 
 function ProfilePage() {
+  const dispatch = useDispatch();
 
-  const location = useLocation();
-  ;debugger
+  const userData = useSelector((store) => store.user.userData);
 
   const registerFormInitialState = {
     name: 'debugger',
@@ -18,10 +21,12 @@ function ProfilePage() {
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(registerFormInitialState);
 
-  const [inputsDisableStatus, setInputsDisableStatus] = useState({
+  const inputsInitialState = {
     name: true,
     email: true,
-  });
+  }
+
+  const [inputsDisableStatus, setInputsDisableStatus] = useState(inputsInitialState);
 
   const handleIconClick = (event) => {
     const input = event.currentTarget.parentElement.children[1];
@@ -32,9 +37,55 @@ function ProfilePage() {
     setTimeout(() => input.focus(), 0)
   }
 
-  const handleUserDataUpdate = (event) => {
-    event.preventDefault();
+
+  const handleExit = () => {
+    dispatch(logoutUserAction(getCookie('refreshToken')))
   }
+
+  const handleGetUserData = async () => {
+    const status = await dispatch(getUserDataAction(getCookie('token')));
+    if (status) {
+      await dispatch(updateTokenAction(getCookie('refreshToken')));
+      dispatch(getUserDataAction(getCookie('token')))
+    }
+  }
+
+  const handleUpdateUserData = async (event) => {
+    event.preventDefault();
+
+    const updatedUserData = {
+      name: values.name,
+      email: values.email
+    }
+
+    const status = await dispatch(updateUserDataAction(getCookie('token'), updatedUserData));
+    if (status) {
+      await dispatch(updateTokenAction(getCookie('refreshToken')));
+      dispatch(updateUserDataAction(getCookie('token'), updatedUserData))
+    }
+    setInputsDisableStatus(inputsInitialState)
+  }
+
+  const handleChancelBtnClick = () => {
+    setInputsDisableStatus(inputsInitialState)
+    setValues({
+      name: userData.name,
+      email: userData.email,
+      password: '',
+    })
+  }
+
+  useEffect(() => {
+    setValues({
+      name: userData.name,
+      email: userData.email,
+      password: '',
+    })
+  }, [userData])
+
+  useEffect( () => {
+    handleGetUserData();
+  }, [])
 
   const setLinkStyle = ({ isActive }) => {
     return isActive
@@ -43,8 +94,8 @@ function ProfilePage() {
   }
 
   const isButtonsShown =
-      registerFormInitialState.name !== values.name
-      || registerFormInitialState.email !== values.email
+      userData.name !== values.name
+      || userData.email !== values.email
 
   return (
       <main className={styles.main}>
@@ -56,7 +107,7 @@ function ProfilePage() {
             <NavLink to='/profile/orders' className={setLinkStyle}>
               История заказов
             </NavLink>
-            <NavLink to='/profile/exit' className={setLinkStyle}>
+            <NavLink to='/profile/exit' className={setLinkStyle} onClick={handleExit}>
               Выход
             </NavLink>
             <p className={`text text_type_main-default mt-20 text_color_inactive ${styles.remark}`}>
@@ -66,7 +117,7 @@ function ProfilePage() {
           <Routes>
             <Route path={'/'} element={
               <section className={styles.userData}>
-                <form onSubmit={handleUserDataUpdate}>
+                <form onSubmit={handleUpdateUserData}>
                   <div className={`${styles.inputWrapper}`}>
                     <Input type={'text'}
                            placeholder={'Имя'}
@@ -103,7 +154,8 @@ function ProfilePage() {
                   {isButtonsShown &&
                       <div className={styles.buttons}>
                         <div className='mt-6'>
-                          <Button type="secondary" size="medium">Отмена</Button>
+                          <Button type="secondary" size="medium" htmlType='button'
+                                  onClick={handleChancelBtnClick}>Отмена</Button>
                         </div>
                         <div className='mt-6'>
                           <Button type="primary" size="medium">Сохранить</Button>
@@ -119,9 +171,9 @@ function ProfilePage() {
               </p>
             } />
             <Route path={'/exit'} element={
-              <p>
-                exit
-              </p>
+              <section className={styles.exit} >
+               <p className='text text_type_main-medium text_color_inactive'>Выполняется выход</p>
+              </section>
             } />
           </Routes>
         </section>

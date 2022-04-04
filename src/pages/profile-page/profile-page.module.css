@@ -51,3 +51,11 @@
     max-width: 480px;
     width: 100%;
 }
+
+.exit {
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

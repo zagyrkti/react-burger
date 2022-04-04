@@ -3,8 +3,11 @@ import useForm from '../../utils/useForm';
 import RedirectCall from '../../components/redirect-call/redirect-call';
 import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css'
+import { useDispatch } from 'react-redux';
+import { loginUserAction } from '../../services/actions';
 
 function LoginPage() {
+  const dispatch = useDispatch();
 
   const loginFormInitialState = {
     email: '',
@@ -13,8 +16,9 @@ function LoginPage() {
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(loginFormInitialState);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
+    dispatch(loginUserAction(values));
   }
 
   return (

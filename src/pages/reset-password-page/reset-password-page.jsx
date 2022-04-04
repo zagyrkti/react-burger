@@ -1,14 +1,18 @@
 import useForm from '../../utils/useForm';
 import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetPasswordAction } from '../../services/actions';
 
 function ResetPasswordPage() {
+  const dispatch = useDispatch();
+
   const resetPasswordFormInitialState = {
     password: '',
-    code: '',
+    token: '',
   }
 
   const [visible, setVisible] = useState(false);
@@ -17,6 +21,7 @@ function ResetPasswordPage() {
 
   const handlePasswordReset = (event) => {
     event.preventDefault();
+    dispatch(resetPasswordAction(values))
   }
 
   const handleIconClick = () => {
@@ -42,8 +47,8 @@ function ResetPasswordPage() {
             <Input type={'text'}
                    placeholder={'Введите код из письма'}
                    onChange={handleChange}
-                   value={values.code}
-                   name={'code'}
+                   value={values.token}
+                   name={'token'}
                    size={'default'}
             />
           </div>

@@ -1,20 +1,12 @@
 import React, { useMemo, useRef } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import IngredientCard from "../ingredient-card/ingredient-card";
-import Modal from "../modal/modal";
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  ADD_INGREDIENT_TO_SELECTED,
-  RESET_SELECTED_INGREDIENT,
-} from '../../services/actions';
 
 function BurgerIngredients() {
-  const dispatch = useDispatch();
 
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-  const clickedIngredient = useSelector((store) => store.ingredientDetails.selectedIngredient)
 
   const [current, setCurrent] = React.useState('one')
 
@@ -40,19 +32,6 @@ function BurgerIngredients() {
       }
       default:
     }
-  }
-
-  const handleIngredientDetailsClose = () => {
-    dispatch({
-      type: RESET_SELECTED_INGREDIENT
-    })
-  }
-
-  const handleIngredientClick = (event, item) => {
-    dispatch({
-      type: ADD_INGREDIENT_TO_SELECTED,
-      payload: item,
-    });
   }
 
   const setNearestTab = () => {
@@ -86,20 +65,17 @@ function BurgerIngredients() {
       switch (ingredient.type) {
         case 'main':
           main.push(
-              <IngredientCard key={ingredient._id} ingredient={ingredient}
-                              onClick={handleIngredientClick} />
+              <IngredientCard key={ingredient._id} ingredient={ingredient} />
           );
           break
         case 'sauce':
           sauce.push(
-              <IngredientCard key={ingredient._id} ingredient={ingredient}
-                              onClick={handleIngredientClick} />
+              <IngredientCard key={ingredient._id} ingredient={ingredient}/>
           );
           break
         case 'bun':
           buns.push(
-              <IngredientCard key={ingredient._id} ingredient={ingredient}
-                              onClick={handleIngredientClick} />
+              <IngredientCard key={ingredient._id} ingredient={ingredient}/>
           );
           break;
         default:
@@ -149,11 +125,11 @@ function BurgerIngredients() {
           </div>
         </div>
 
-        {clickedIngredient.name &&
+{/*        {clickedIngredient.name &&
             <Modal onClose={handleIngredientDetailsClose}>
               <IngredientDetails/>
             </Modal>
-        }
+        }*/}
 
       </section>
   )
