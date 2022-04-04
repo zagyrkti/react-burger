@@ -64,7 +64,7 @@ const placeOrderAction = (idList, token) => {
             dispatch(placeOrderAction(idList, getCookie('token')));
           } else {
             dispatch({ type: PLACE_ORDER_FAILED });
-            console.log(`%cCatch placeOrderAction ${error}`, 'color: red');
+            console.log(`%cCatch placeOrderAction ${error?.message}`, 'color: red');
           }
         })
   }
@@ -97,7 +97,7 @@ const registerUserAction = (registerData) => {
         })
         .catch((error) => {
           dispatch({ type: REGISTER_USER_FAILED });
-          console.log(`%cCatch registerUserAction ${error}`, 'color: red');
+          console.log(`%cCatch registerUserAction ${error?.message}`, 'color: red');
         })
 
   }
@@ -125,7 +125,7 @@ const loginUserAction = (loginData) => {
         })
         .catch((error) => {
           dispatch({ type: LOGIN_USER_FAILED });
-          console.log(`%cCatch loginUserAction ${error}`, 'color: red');
+          console.log(`%cCatch loginUserAction ${error?.message}`, 'color: red');
         })
   }
 };
@@ -149,7 +149,7 @@ const updateTokenAction = (token) => {
         })
         .catch((error) => {
           dispatch({ type: UPDATE_TOKEN_FAILED });
-          console.log(`%cCatch updateTokenAction ${error}`, 'color: red');
+          console.log(`%cCatch updateTokenAction ${error?.message}`, 'color: red');
         })
   }
 };
@@ -173,7 +173,7 @@ const logoutUserAction = (token) => {
         })
         .catch((error) => {
           dispatch({ type: LOGOUT_USER_FAILED });
-          console.log(`%cCatch logoutUserAction ${error}`, 'color: red');
+          console.log(`%cCatch logoutUserAction ${error?.message}`, 'color: red');
         })
   }
 };
@@ -205,7 +205,7 @@ const getUserDataAction = (token) => {
             dispatch(getUserDataAction(getCookie('token')));
           } else {
             dispatch({ type: GET_USER_DATA_FAILED });
-            console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
+            console.log(`%cCatch getUserDataAction ${error?.message}`, 'color: red');
           }
         })
   }
@@ -238,7 +238,7 @@ const updateUserDataAction = (token, userData) => {
             dispatch(updateUserDataAction(getCookie('token'), userData));
           } else {
             dispatch({ type: UPDATE_USER_DATA_FAILED });
-            console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
+            console.log(`%cCatch getUserDataAction ${error?.message}`, 'color: red');
           }
         })
   }
@@ -261,7 +261,7 @@ const forgotPasswordAction = (email) => {
         })
         .catch((error) => {
           dispatch({ type: FORGOT_PASSWORD_FAILED });
-          console.log(`%cCatch forgotPasswordAction ${error}`, 'color: red');
+          console.log(`%cCatch forgotPasswordAction ${error?.message}`, 'color: red');
         })
   }
 };
@@ -283,7 +283,7 @@ const resetPasswordAction = (resetData) => {
         })
         .catch((error) => {
           dispatch({ type: RESET_PASSWORD_FAILED });
-          console.log(`%cCatch resetPasswordAction ${error}`, 'color: red');
+          console.log(`%cCatch resetPasswordAction ${error?.message}`, 'color: red');
         })
   }
 };
