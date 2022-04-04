@@ -12,8 +12,6 @@ function ForgotPasswordPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-
   const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const forgotPasswordFormInitialState = {
@@ -21,10 +19,6 @@ function ForgotPasswordPage() {
   }
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(forgotPasswordFormInitialState);
-
-  const checkValidity = () => {
-
-  }
 
   const handlePasswordRecovery = async (event) => {
     event.preventDefault();
