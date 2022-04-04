@@ -1,36 +1,42 @@
 import {Logo} from "@ya.praktikum/react-developer-burger-ui-components";
 import {BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import {Link} from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import styles from './app-header.module.css';
 
 function AppHeader() {
+
+  const setLinkStyle = ({ isActive }) => {
+    return isActive
+        ? `${styles.link} pt-4 pb-4 pl-5 pr-5 text text_type_main-default text_color_primary`
+        : `${styles.link} pt-4 pb-4 pl-5 pr-5 text text_type_main-default text_color_inactive`
+  }
 
   return (
       <header className={`${styles.header} pt-4 pb-4`}>
         <nav className={styles.nav}>
           <ul className={styles.list}>
             <li>
-              <Link to={'/'} className={`${styles.link} pt-4 pb-4 pl-5 pr-5`}>
+              <NavLink to='/' className={setLinkStyle}>
                 <BurgerIcon type="primary"/>
-                <span className="text text_type_main-default ml-2">Конструктор</span>
-              </Link>
+                <span className="ml-2">Конструктор</span>
+              </NavLink>
             </li>
             <li className="ml-2">
-              <Link to={'/'} className={`${styles.link} pt-4 pb-4 pl-5 pr-5`}>
+              <NavLink to='/orders' className={setLinkStyle}>
                 <ListIcon type="secondary"/>
-                <span className="text text_type_main-default text_color_inactive ml-2">Лента заказов</span>
-              </Link>
+                <span className="ml-2">Лента заказов</span>
+              </NavLink>
             </li>
             <li className={`${styles.item_type_logo} mt-1`}>
-              <Link to={'/'} className={styles.link}>
+              <NavLink to='/' className={styles.link}>
                 <Logo/>
-              </Link>
+              </NavLink>
             </li>
             <li className={styles.item_pos_left}>
-              <Link to={'/profile'} className={`${styles.link}  pt-4 pb-4 pl-5 pr-5`}>
+              <NavLink to='/profile' className={setLinkStyle}>
                 <ProfileIcon type="secondary"/>
-                <span className="text text_type_main-default text_color_inactive ml-2">Личный кабинет</span>
-              </Link>
+                <span className="ml-2">Личный кабинет</span>
+              </NavLink>
             </li>
           </ul>
         </nav>

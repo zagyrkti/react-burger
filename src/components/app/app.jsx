@@ -28,6 +28,7 @@ function App() {
   let location = useLocation();
 
   const userData = useSelector((store) => store.user.userData);
+  const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const handleIngredientDetailsClose = () => {
     dispatch({
@@ -74,12 +75,12 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/reset-password' element={
-            <ProtectedRoute redirectTo={'/'} passCondition={!userData.name}>
+            <ProtectedRoute redirectTo={'/forgot-password'} passCondition={!userData.name && isPasswordRecoveryEmailSent}>
               <ResetPasswordPage />
             </ProtectedRoute>
           } />
           <Route path='/profile/*' element={
-            <ProtectedRoute redirectTo={'/'} passCondition={userData.name}>
+            <ProtectedRoute redirectTo={'/login'} passCondition={userData.name}>
               <ProfilePage />
             </ProtectedRoute>
           } />

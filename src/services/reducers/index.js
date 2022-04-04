@@ -56,6 +56,7 @@ const initialState = {
       email: '',
       name: '',
     },
+    isPasswordRecoveryEmailSent: false,
     isRequestSent: false,
     isRequestFailed: false,
   },
@@ -85,18 +86,21 @@ const user = (state = initialState.user, action) => {
     case FORGOT_PASSWORD_REQUEST:
       return {
         ...state,
+        isPasswordRecoveryEmailSent: false,
         isRequestSent: true,
         isRequestFailed: false,
       };
     case FORGOT_PASSWORD_SUCCESS:
       return {
         ...state,
+        isPasswordRecoveryEmailSent: true,
         isRequestSent: false,
         isRequestFailed: false,
       };
     case FORGOT_PASSWORD_FAILED:
       return {
         ...state,
+        isPasswordRecoveryEmailSent: false,
         isRequestSent: false,
         isRequestFailed: true,
       };

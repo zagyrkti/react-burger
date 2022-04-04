@@ -1,13 +1,18 @@
 import useForm from '../../utils/useForm';
 import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { forgotPasswordAction } from '../../services/actions';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ForgotPasswordPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const forgotPasswordFormInitialState = {
     email: '',
@@ -15,10 +20,16 @@ function ForgotPasswordPage() {
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(forgotPasswordFormInitialState);
 
-  const handlePasswordRecovery = (event) => {
+  const handlePasswordRecovery = async (event) => {
     event.preventDefault();
     dispatch(forgotPasswordAction(values.email));
   }
+
+  useEffect(() => {
+    if (isPasswordRecoveryEmailSent) {
+      navigate('/reset-password')
+    }
+  }, [isPasswordRecoveryEmailSent])
 
   return (
       <Registration>

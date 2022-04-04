@@ -230,7 +230,7 @@ const FORGOT_PASSWORD_FAILED = 'FORGOT_PASSWORD_FAILED';
 const forgotPasswordAction = (email) => {
   return function (dispatch) {
     dispatch({ type: FORGOT_PASSWORD_REQUEST })
-    forgotPasswordRequest(email)
+    return forgotPasswordRequest(email)
         .then((data) => {
           if (data.success) {
             dispatch({ type: FORGOT_PASSWORD_SUCCESS })
