@@ -7,7 +7,7 @@ import {
   registerRequest, resetPasswordRequest,
   updateTokenRequest, updateUserDataRequest
 } from '../../utils/api';
-import { deleteCookie, setCookie } from '../../utils/cookies-auxiliary';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookies-auxiliary';
 
 const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
@@ -55,7 +55,18 @@ const placeOrderAction = (idList, token) => {
             return new Error('Placing order failed');
           }
         })
-        .catch(() => dispatch({ type: PLACE_ORDER_FAILED }));
+        .catch(async (error) => {
+          const retryCondition = (error.status === 403 && error.message === 'jwt malformed')
+              || (error.status === 403 && error.message === 'jwt expired')
+
+          if (retryCondition && getCookie('refreshToken')) {
+            await dispatch(updateTokenAction(getCookie('refreshToken')));
+            dispatch(placeOrderAction(idList, getCookie('token')));
+          } else {
+            dispatch({ type: PLACE_ORDER_FAILED });
+            console.log(`%cCatch placeOrderAction ${error}`, 'color: red');
+          }
+        })
   }
 };
 
@@ -185,12 +196,17 @@ const getUserDataAction = (token) => {
             return Promise.reject(`${data.success}`);
           }
         })
-        .catch((error) => {
-          dispatch({ type: GET_USER_DATA_FAILED });
-          if (error === '403') {
-            return error
+        .catch(async (error) => {
+          const retryCondition = (error.status === 403 && error.message === 'jwt malformed')
+              || (error.status === 403 && error.message === 'jwt expired')
+
+          if (retryCondition && getCookie('refreshToken')) {
+            await dispatch(updateTokenAction(getCookie('refreshToken')));
+            dispatch(getUserDataAction(getCookie('token')));
+          } else {
+            dispatch({ type: GET_USER_DATA_FAILED });
+            console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
           }
-          console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
         })
   }
 };
@@ -213,12 +229,17 @@ const updateUserDataAction = (token, userData) => {
             return Promise.reject(`${data.success}`);
           }
         })
-        .catch((error) => {
-          dispatch({ type: UPDATE_USER_DATA_FAILED });
-          if (error === '403') {
-            return error
+        .catch(async (error) => {
+          const retryCondition = (error.status === 403 && error.message === 'jwt malformed')
+          || (error.status === 403 && error.message === 'jwt expired')
+
+          if (retryCondition && getCookie('refreshToken')) {
+            await dispatch(updateTokenAction(getCookie('refreshToken')));
+            dispatch(updateUserDataAction(getCookie('token'), userData));
+          } else {
+            dispatch({ type: UPDATE_USER_DATA_FAILED });
+            console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
           }
-          console.log(`%cCatch getUserDataAction ${error}`, 'color: red');
         })
   }
 };

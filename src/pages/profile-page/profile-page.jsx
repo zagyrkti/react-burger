@@ -5,7 +5,7 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import useForm from '../../utils/useForm';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserDataAction, logoutUserAction, updateTokenAction, updateUserDataAction } from '../../services/actions';
+import { getUserDataAction, logoutUserAction, updateUserDataAction } from '../../services/actions';
 import { getCookie } from '../../utils/cookies-auxiliary';
 
 function ProfilePage() {
@@ -42,15 +42,11 @@ function ProfilePage() {
     dispatch(logoutUserAction(getCookie('refreshToken')))
   }
 
-  const handleGetUserData = async () => {
-    const status = await dispatch(getUserDataAction(getCookie('token')));
-    if (status) {
-      await dispatch(updateTokenAction(getCookie('refreshToken')));
-      dispatch(getUserDataAction(getCookie('token')))
-    }
+  const handleGetUserData = () => {
+    dispatch(getUserDataAction(getCookie('token')));
   }
 
-  const handleUpdateUserData = async (event) => {
+  const handleUpdateUserData = (event) => {
     event.preventDefault();
 
     const updatedUserData = {
@@ -58,11 +54,7 @@ function ProfilePage() {
       email: values.email
     }
 
-    const status = await dispatch(updateUserDataAction(getCookie('token'), updatedUserData));
-    if (status) {
-      await dispatch(updateTokenAction(getCookie('refreshToken')));
-      dispatch(updateUserDataAction(getCookie('token'), updatedUserData))
-    }
+    dispatch(updateUserDataAction(getCookie('token'), updatedUserData));
     setInputsDisableStatus(inputsInitialState)
   }
 
@@ -83,7 +75,7 @@ function ProfilePage() {
     })
   }, [userData])
 
-  useEffect( () => {
+  useEffect(() => {
     handleGetUserData();
   }, [])
 
@@ -171,8 +163,8 @@ function ProfilePage() {
               </p>
             } />
             <Route path={'/exit'} element={
-              <section className={styles.exit} >
-               <p className='text text_type_main-medium text_color_inactive'>Выполняется выход</p>
+              <section className={styles.exit}>
+                <p className='text text_type_main-medium text_color_inactive'>Выполняется выход</p>
               </section>
             } />
           </Routes>

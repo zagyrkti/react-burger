@@ -4,7 +4,11 @@ function processResponse(res) {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`${res.status}`);
+  /*return Promise.reject(`${res.status}`);*/
+  return res.json()
+      .then((errorRes) => {
+        return Promise.reject({status: res.status, ...errorRes})
+      })
 }
 
 const orderBurger = (burgerIngredientsId, token) => {

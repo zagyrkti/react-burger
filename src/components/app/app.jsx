@@ -80,7 +80,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/profile/*' element={
-            <ProtectedRoute redirectTo={'/login'} passCondition={userData.name}>
+            <ProtectedRoute redirectTo={'/login'} passCondition={!!userData.name}>
               <ProfilePage />
             </ProtectedRoute>
           } />

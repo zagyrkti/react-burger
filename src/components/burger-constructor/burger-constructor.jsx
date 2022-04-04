@@ -10,7 +10,7 @@ import { useDrop } from 'react-dnd';
 import ConstructorToppingCard from '../constructor-topping-card/constructor-topping-card';
 import {
   ADD_BUN_TO_CONSTRUCTOR, ADD_TOPPING_TO_CONSTRUCTOR, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER, updateTokenAction,
+  placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER,
 } from '../../services/actions';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../../utils/cookies-auxiliary';
@@ -46,16 +46,9 @@ function BurgerConstructor() {
       return;
     }
 
-    const token = getCookie('token');
     const idList = getIngredientsPropertyValues(constructorIngredients, bun, '_id')
-    if (token) {
     setTimeout(changeOderModalState, 250);
-    dispatch(placeOrderAction(idList, token));
-    } else {
-      await dispatch(updateTokenAction(getCookie('refreshToken')));
-      dispatch(placeOrderAction(idList, getCookie('token')));
-      setTimeout(changeOderModalState, 250);
-    }
+    dispatch(placeOrderAction(idList, getCookie('token')));
   }
 
   const handleDeleteBtnClick = (uuid) => {
