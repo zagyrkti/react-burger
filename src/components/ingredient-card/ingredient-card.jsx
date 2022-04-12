@@ -1,13 +1,16 @@
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useMemo } from "react";
 import styles from './ingredient-card.module.css';
-import PropTypes from "prop-types";
 import ingredientShape from "../../utils/proptypes";
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { ADD_INGREDIENT_TO_SELECTED } from '../../services/actions';
+import { Link, useLocation } from 'react-router-dom';
 
 function IngredientCard(props) {
+  const dispatch = useDispatch();
   const ingredient = props.ingredient;
+  let location = useLocation();
   const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
   const constructorBun = useSelector((store) => store.burgerConstructor.bun);
 
@@ -19,17 +22,26 @@ function IngredientCard(props) {
     })
   });
 
+  const handleIngredientClick = () => {
+    dispatch({
+      type: ADD_INGREDIENT_TO_SELECTED,
+      payload: ingredient,
+    });
+  }
+
   const counter = useMemo(() => {
-    const ingredientInstancesInConstructor = [...constructorIngredients, constructorBun]
+    const ingredientInstancesInConstructor = [...constructorIngredients, constructorBun, constructorBun]
         .filter((constructorIngredient) => ingredient._id === constructorIngredient._id)
 
     return ingredientInstancesInConstructor.length
-  },[constructorIngredients, constructorBun, ingredient._id]);
+  }, [constructorIngredients, constructorBun, ingredient._id]);
 
   return (
-      <div className={`${styles.ingredientCard} mt-6`}
-           onClick={(event) => props.onClick(event, ingredient)}
-           ref={dragRef}
+      <Link to={`/ingredients/${ingredient._id}`}
+            state={{backgroundLocation: location}}
+            className={`${styles.ingredientCard} mt-6 text_color_primary`}
+            onClick={handleIngredientClick}
+            ref={dragRef}
       >
         {!!counter && <Counter count={counter} size="default" />}
         <img src={ingredient.image} alt="" className={`${styles.ingredientImage} pl-4 pr-4`} />
@@ -38,13 +50,12 @@ function IngredientCard(props) {
           <CurrencyIcon type="primary" />
         </div>
         <p className={`${styles.ingredientName} mt-2 text text_type_main-default`}>{ingredient.name}</p>
-      </div>
+      </Link>
   )
 }
 
 IngredientCard.propTypes = {
   ingredient: ingredientShape.isRequired,
-  onClick: PropTypes.func.isRequired,
 }
 
 export default IngredientCard;

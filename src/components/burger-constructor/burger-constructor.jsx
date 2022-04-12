@@ -10,15 +10,19 @@ import { useDrop } from 'react-dnd';
 import ConstructorToppingCard from '../constructor-topping-card/constructor-topping-card';
 import {
   ADD_BUN_TO_CONSTRUCTOR, ADD_TOPPING_TO_CONSTRUCTOR, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER
+  placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER,
 } from '../../services/actions';
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '../../utils/cookies-auxiliary';
 
 function BurgerConstructor() {
   const dispatch = useDispatch();
   const modalState = useSelector((state) => state.order.isModalOpen);
+  const navigate = useNavigate();
 
   const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
   const bun = useSelector((store) => store.burgerConstructor.bun);
+  const userData = useSelector((store) => store.user.userData);
 
   const changeOderModalState = () => {
     dispatch({
@@ -36,10 +40,15 @@ function BurgerConstructor() {
     return id;
   }
 
-  const handleOrder = () => {
-    setTimeout(changeOderModalState, 250);
+  const handleOrder = async () => {
+    if (!userData.name) {
+      navigate('/login')
+      return;
+    }
+
     const idList = getIngredientsPropertyValues(constructorIngredients, bun, '_id')
-    dispatch(placeOrderAction(idList));
+    setTimeout(changeOderModalState, 250);
+    dispatch(placeOrderAction(idList, getCookie('token')));
   }
 
   const handleDeleteBtnClick = (uuid) => {
