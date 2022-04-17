@@ -9,7 +9,6 @@ import {
   RESET_SELECTED_INGREDIENT,
   updateTokenAction
 } from '../../services/actions';
-import { useDispatch, useSelector } from 'react-redux';
 import LoginPage from '../../pages/login-page/login-page';
 import ForgotPasswordPage from '../../pages/forgot-password-page/forgot-password-page';
 import ResetPasswordPage from '../../pages/reset-password-page/reset-password-page';
@@ -20,15 +19,20 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import ProtectedRoute from '../protected-route/protected-route';
 import { getCookie } from '../../utils/cookies-auxiliary';
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
+interface ILocationState {
+  backgroundLocation?: Location
+}
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let location = useLocation();
+  let locationState: ILocationState = (location.state && typeof location.state === 'object') ? location.state : {};
 
-  const userData = useSelector((store) => store.user.userData);
-  const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
+  const userData = useAppSelector((store) => store.user.userData);
+  const isPasswordRecoveryEmailSent = useAppSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const handleIngredientDetailsClose = () => {
     dispatch({
@@ -41,7 +45,7 @@ function App() {
     dispatch(getIngredientsAction());
   }, [dispatch])
 
-  const handleLoginByToken = async (token) => {
+  const handleLoginByToken = async (token: string) => {
     await dispatch(updateTokenAction(token))
     dispatch(getUserDataAction(getCookie('token')));
   }
@@ -57,7 +61,7 @@ function App() {
   return (
       <>
         <AppHeader />
-        <Routes location={location.state?.backgroundLocation || location}>
+        <Routes location={locationState.backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
           <Route path='/login' element={
             <ProtectedRoute redirectTo={'/'} passCondition={!userData.name}>
@@ -75,7 +79,8 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/reset-password' element={
-            <ProtectedRoute redirectTo={'/forgot-password'} passCondition={!userData.name && isPasswordRecoveryEmailSent}>
+            <ProtectedRoute redirectTo={'/forgot-password'}
+                            passCondition={!userData.name && isPasswordRecoveryEmailSent}>
               <ResetPasswordPage />
             </ProtectedRoute>
           } />
@@ -87,7 +92,7 @@ function App() {
           <Route path='/ingredients/:id' element={<IngredientPage />} />
         </Routes>
 
-        {location.state?.backgroundLocation && (
+        {locationState.backgroundLocation && (
             <Routes>
               <Route path="/ingredients/:id" element={
                 <Modal onClose={handleIngredientDetailsClose}>

@@ -1,18 +1,23 @@
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import styles from './ingredient-card.module.css';
-import ingredientShape from "../../utils/proptypes";
 import { useDrag } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
 import { ADD_INGREDIENT_TO_SELECTED } from '../../services/actions';
 import { Link, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { IIngredient } from "../../shared/types/types";
 
-function IngredientCard(props) {
-  const dispatch = useDispatch();
+interface IIngredientCard {
+  ingredient: IIngredient,
+}
+
+const IngredientCard: FC<IIngredientCard> = (props) => {
+  const dispatch = useAppDispatch();
   const ingredient = props.ingredient;
   let location = useLocation();
-  const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
-  const constructorBun = useSelector((store) => store.burgerConstructor.bun);
+
+  const constructorIngredients: Array<IIngredient> = useAppSelector((store) => store.burgerConstructor.topping);
+  const constructorBun: IIngredient = useAppSelector((store) => store.burgerConstructor.bun);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: "ingredient",
@@ -38,7 +43,7 @@ function IngredientCard(props) {
 
   return (
       <Link to={`/ingredients/${ingredient._id}`}
-            state={{backgroundLocation: location}}
+            state={{ backgroundLocation: location }}
             className={`${styles.ingredientCard} mt-6 text_color_primary`}
             onClick={handleIngredientClick}
             ref={dragRef}
@@ -52,10 +57,6 @@ function IngredientCard(props) {
         <p className={`${styles.ingredientName} mt-2 text text_type_main-default`}>{ingredient.name}</p>
       </Link>
   )
-}
-
-IngredientCard.propTypes = {
-  ingredient: ingredientShape.isRequired,
 }
 
 export default IngredientCard;

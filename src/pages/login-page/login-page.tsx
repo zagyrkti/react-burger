@@ -5,6 +5,8 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css'
 import { useDispatch } from 'react-redux';
 import { loginUserAction } from '../../services/actions';
+import { SyntheticEvent } from "react";
+import { ILoginData } from "../../shared/types/types";
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -14,9 +16,9 @@ function LoginPage() {
     password: '',
   }
 
-  const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(loginFormInitialState);
+  const { values, handleChange, resetForm, errors, isValid, setValues } = useForm<ILoginData>(loginFormInitialState);
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (event: SyntheticEvent) => {
     event.preventDefault();
     dispatch(loginUserAction(values));
   }
@@ -35,8 +37,7 @@ function LoginPage() {
             />
           </div>
           <div className={`mt-6 ${registrationStyles.inputWrapper}`}>
-            <PasswordInput placeholder={'Пароль'}
-                           onChange={handleChange}
+            <PasswordInput onChange={handleChange}
                            value={values.password}
                            name={'password'}
             />

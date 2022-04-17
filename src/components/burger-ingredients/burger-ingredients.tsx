@@ -1,33 +1,34 @@
-import React, { useMemo, useRef } from "react";
+import React, { ReactNode, useMemo, useRef } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-ingredients.module.css';
 import IngredientCard from "../ingredient-card/ingredient-card";
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector } from "../../hooks/redux";
+import { IIngredient } from "../../shared/types/types";
 
 function BurgerIngredients() {
 
-  const ingredients = useSelector((store) => store.ingredients.ingredients);
+  const ingredients: Array<IIngredient> = useAppSelector((store) => store.ingredients.ingredients);
 
-  const [current, setCurrent] = React.useState('one')
+  const [current, setCurrent] = React.useState<string>('one')
 
-  const bunRef = useRef();
-  const sauceRef = useRef();
-  const mainRef = useRef();
-  const containerRef = useRef();
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleTabClick = (tabName) => {
+  const handleTabClick = (tabName: string) => {
     setCurrent(tabName);
     switch (tabName) {
       case 'one': {
-        bunRef.current.scrollIntoView({ behavior: 'smooth' });
+        bunRef.current?.scrollIntoView({ behavior: 'smooth' });
         break;
       }
       case 'two': {
-        sauceRef.current.scrollIntoView({ behavior: 'smooth' });
+        sauceRef.current?.scrollIntoView({ behavior: 'smooth' });
         break;
       }
       case 'three': {
-        mainRef.current.scrollIntoView({ behavior: 'smooth' });
+        mainRef.current?.scrollIntoView({ behavior: 'smooth' });
         break;
       }
       default:
@@ -40,6 +41,10 @@ function BurgerIngredients() {
     const sauceRect = sauceRef.current?.getBoundingClientRect();
     const mainRect = mainRef.current?.getBoundingClientRect();
     const containerRect = containerRef.current?.getBoundingClientRect();
+
+    if (!containerRect || !mainRect || !sauceRect || !bunRect) {
+      return;
+    }
 
     if (Math.abs(containerRect.top - bunRect.top) < 140) {
       setCurrent('one')
@@ -57,9 +62,9 @@ function BurgerIngredients() {
   }
 
   const ingredientsCards = useMemo(() => {
-    const buns = [];
-    const sauce = [];
-    const main = [];
+    const buns: Array<ReactNode> = [];
+    const sauce: Array<ReactNode> = [];
+    const main: Array<ReactNode> = [];
 
     ingredients.forEach((ingredient) => {
       switch (ingredient.type) {
@@ -70,12 +75,12 @@ function BurgerIngredients() {
           break
         case 'sauce':
           sauce.push(
-              <IngredientCard key={ingredient._id} ingredient={ingredient}/>
+              <IngredientCard key={ingredient._id} ingredient={ingredient} />
           );
           break
         case 'bun':
           buns.push(
-              <IngredientCard key={ingredient._id} ingredient={ingredient}/>
+              <IngredientCard key={ingredient._id} ingredient={ingredient} />
           );
           break;
         default:
@@ -125,7 +130,7 @@ function BurgerIngredients() {
           </div>
         </div>
 
-{/*        {clickedIngredient.name &&
+        {/*        {clickedIngredient.name &&
             <Modal onClose={handleIngredientDetailsClose}>
               <IngredientDetails/>
             </Modal>

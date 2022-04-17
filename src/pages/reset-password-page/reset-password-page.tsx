@@ -3,13 +3,13 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { SyntheticEvent, useState } from 'react';
 import { resetPasswordAction } from '../../services/actions';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from "../../hooks/redux";
 
 function ResetPasswordPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const resetPasswordFormInitialState = {
@@ -21,7 +21,7 @@ function ResetPasswordPage() {
 
   const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(resetPasswordFormInitialState);
 
-  const handlePasswordReset = (event) => {
+  const handlePasswordReset = (event: SyntheticEvent) => {
     event.preventDefault();
     dispatch(resetPasswordAction(values))
     navigate('/login')

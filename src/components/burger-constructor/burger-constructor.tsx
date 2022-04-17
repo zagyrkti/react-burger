@@ -5,7 +5,6 @@ import React, { useMemo } from "react";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import ConstructorToppingCard from '../constructor-topping-card/constructor-topping-card';
 import {
@@ -14,15 +13,25 @@ import {
 } from '../../services/actions';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../../utils/cookies-auxiliary';
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { IIngredient, IUserData, TMoveCardHandler } from "../../shared/types/types";
+
+type TOnDropHandler = (data: { ingredient: IIngredient }) => void;
+
+type TGetIngredientsPropertyValues = (
+    topping: Array<IIngredient>,
+    bun: IIngredient,
+    property: string
+) => Array<string | number>;
 
 function BurgerConstructor() {
-  const dispatch = useDispatch();
-  const modalState = useSelector((state) => state.order.isModalOpen);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const constructorIngredients = useSelector((store) => store.burgerConstructor.topping);
-  const bun = useSelector((store) => store.burgerConstructor.bun);
-  const userData = useSelector((store) => store.user.userData);
+  const modalState = useAppSelector((state) => state.order.isModalOpen);
+  const constructorIngredients: Array<IIngredient> = useAppSelector((store) => store.burgerConstructor.topping);
+  const bun: IIngredient = useAppSelector((store) => store.burgerConstructor.bun);
+  const userData: IUserData = useAppSelector((store) => store.user.userData);
 
   const changeOderModalState = () => {
     dispatch({
@@ -30,14 +39,14 @@ function BurgerConstructor() {
     })
   }
 
-  const getIngredientsPropertyValues = (topping, bun, property) => {
-    const id = [];
-    topping.forEach((ingredient) => id.push(ingredient[property]));
+  const getIngredientsPropertyValues: TGetIngredientsPropertyValues = (topping, bun, property) => {
+    const values: Array<string | number> = [];
+    topping.forEach((ingredient) => values.push(ingredient[property]));
     if (bun) {
-      id.push(bun[property])
-      id.push(bun[property])
+      values.push(bun[property])
+      values.push(bun[property])
     }
-    return id;
+    return values;
   }
 
   const handleOrder = async () => {
@@ -51,14 +60,14 @@ function BurgerConstructor() {
     dispatch(placeOrderAction(idList, getCookie('token')));
   }
 
-  const handleDeleteBtnClick = (uuid) => {
+  const handleDeleteBtnClick = (uuid: string) => {
     dispatch({
       type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
       payload: uuid,
     })
   }
 
-  const onDropHandler = ({ ingredient }) => {
+  const onDropHandler: TOnDropHandler = ({ ingredient }) => {
     const uuid = uuidv4();
     if (ingredient.type !== 'bun') {
       dispatch({
@@ -74,7 +83,7 @@ function BurgerConstructor() {
     }
   }
 
-  const moveCardHandler = (dragIndex, hoverIndex) => {
+  const moveCardHandler: TMoveCardHandler = (dragIndex, hoverIndex) => {
     const dragItem = constructorIngredients[dragIndex];
 
     const coppiedStateArray = [...constructorIngredients];
@@ -89,7 +98,7 @@ function BurgerConstructor() {
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(ingredient) {
+    drop(ingredient: { ingredient: IIngredient }) {
       onDropHandler(ingredient);
     },
     collect: monitor => ({
@@ -109,23 +118,24 @@ function BurgerConstructor() {
       }
       return 0
     }, 0)
-  },[bun, constructorIngredients])
+  }, [bun, constructorIngredients])
 
   return (
       <section className={`${styles.burgerConstructor} mt-20 pl-4`}>
         <div className={`${styles.constructedBurger} ${constructedBurgerTargeted} pt-5 pb-5`} ref={dropTarget}>
-          <div className={`pl-7 ${styles.bunWrapper}`} >
-              {!!bun.type &&
-                  <ConstructorElement type="top"
-                                      isLocked={true}
-                                      text={`${bun.name} (верх)`}
-                                      price={bun.price}
-                                      thumbnail={bun.image}
-                  />}
+          <div className={`pl-7 ${styles.bunWrapper}`}>
+            {!!bun.type &&
+                <ConstructorElement type="top"
+                                    isLocked={true}
+                                    text={`${bun.name} (верх)`}
+                                    price={bun.price}
+                                    thumbnail={bun.image}
+                />}
 
             {!bun.type &&
-                <div className={`${styles.placeholderBun} ${styles.placeholderBunTypeTop}`}>Перетащите булку по вкусу</div>
-                }
+                <div className={`${styles.placeholderBun} ${styles.placeholderBunTypeTop}`}>Перетащите булку по
+                  вкусу</div>
+            }
           </div>
 
           <div className={`${styles.innerIngredients} custom-scroll pr-2`}>
@@ -141,11 +151,11 @@ function BurgerConstructor() {
                 }
             )}
             {!constructorIngredients.length &&
-              <p className={styles.callText}>Накидайте начинки</p>
+                <p className={styles.callText}>Накидайте начинки</p>
             }
           </div>
 
-          <div className={`pl-7 ${styles.bunWrapper}`} >
+          <div className={`pl-7 ${styles.bunWrapper}`}>
             {!!bun.type &&
                 <ConstructorElement type="bottom"
                                     isLocked={true}
@@ -154,7 +164,8 @@ function BurgerConstructor() {
                                     thumbnail={bun.image}
                 />}
             {!bun.type &&
-                <div className={`${styles.placeholderBun} ${styles.placeholderBunTypeBottom}`}>Перетащите булку по вкусу</div>
+                <div className={`${styles.placeholderBun} ${styles.placeholderBunTypeBottom}`}>Перетащите булку по
+                  вкусу</div>
             }
           </div>
         </div>

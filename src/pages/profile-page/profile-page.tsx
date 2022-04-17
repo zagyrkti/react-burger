@@ -3,15 +3,21 @@ import { NavLink } from 'react-router-dom';
 import { Route, Routes } from "react-router-dom";
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import useForm from '../../utils/useForm';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { getUserDataAction, logoutUserAction, updateUserDataAction } from '../../services/actions';
 import { getCookie } from '../../utils/cookies-auxiliary';
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { IObjectKeysWithBoolean, TSetLinkStyle } from "../../shared/types/types";
+
+interface IInputsDisableStatus extends IObjectKeysWithBoolean {
+  name: boolean,
+  email: boolean,
+}
 
 function ProfilePage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const userData = useSelector((store) => store.user.userData);
+  const userData = useAppSelector((store) => store.user.userData);
 
   const registerFormInitialState = {
     name: 'debugger',
@@ -26,15 +32,17 @@ function ProfilePage() {
     email: true,
   }
 
-  const [inputsDisableStatus, setInputsDisableStatus] = useState(inputsInitialState);
+  const [inputsDisableStatus, setInputsDisableStatus] = useState<IInputsDisableStatus>(inputsInitialState);
 
-  const handleIconClick = (event) => {
-    const input = event.currentTarget.parentElement.children[1];
-    const inputName = input.name
-    setInputsDisableStatus((prevState) => (
-        { ...prevState, [inputName]: !inputsDisableStatus[inputName] })
-    )
-    setTimeout(() => input.focus(), 0)
+  const handleIconClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    if (event.currentTarget?.parentElement?.children[1].tagName === 'INPUT') {
+      const input = event.currentTarget?.parentElement?.children[1] as HTMLInputElement
+      const inputName = input.name
+      setInputsDisableStatus((prevState) => (
+          { ...prevState, [inputName]: !inputsDisableStatus[inputName] })
+      )
+      setTimeout(() => input.focus(), 0)
+    }
   }
 
 
@@ -46,7 +54,7 @@ function ProfilePage() {
     dispatch(getUserDataAction(getCookie('token')));
   }
 
-  const handleUpdateUserData = (event) => {
+  const handleUpdateUserData = (event: SyntheticEvent) => {
     event.preventDefault();
 
     const updatedUserData = {
@@ -79,7 +87,7 @@ function ProfilePage() {
     handleGetUserData();
   }, [])
 
-  const setLinkStyle = ({ isActive }) => {
+  const setLinkStyle: TSetLinkStyle = ({ isActive }) => {
     return isActive
         ? `text text_type_main-medium text_color_primary ${styles.link}`
         : `text text_type_main-medium text_color_inactive ${styles.link}`
@@ -137,8 +145,7 @@ function ProfilePage() {
                     />
                   </div>
                   <div className={`mt-6 ${styles.inputWrapper}`}>
-                    <PasswordInput placeholder={'Пароль'}
-                                   onChange={handleChange}
+                    <PasswordInput onChange={handleChange}
                                    value={values.password}
                                    name={'password'}
                     />

@@ -2,13 +2,13 @@ import React from "react";
 import styles from './order-details.module.css'
 import orderAccepted from '../../images/orderAccepted.gif'
 import loader from '../../images/loader.gif'
-import { useSelector } from 'react-redux';
+import { useAppSelector } from "../../hooks/redux";
 
 function OrderDetails() {
 
-  const orderDetailsData = useSelector((store) => store.order.orderDetails);
-  const isRequestFailed = useSelector((store) => store.order.isRequestFailed);
-  const isRequestSent = useSelector((store) => store.order.isRequestSent);
+  const orderDetailsData = useAppSelector((store) => store.order.orderDetails);
+  const isRequestFailed = useAppSelector((store) => store.order.isRequestFailed);
+  const isRequestSent = useAppSelector((store) => store.order.isRequestSent);
 
   return (
       <>

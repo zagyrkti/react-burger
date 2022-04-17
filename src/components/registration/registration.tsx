@@ -1,6 +1,7 @@
 import styles from './registration.module.css'
+import { FC } from "react";
 
-function Registration({ children }) {
+const Registration: FC = ({ children }) => {
 
   return (
       <main className={styles.main}>
