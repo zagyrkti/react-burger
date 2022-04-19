@@ -3,11 +3,14 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { useDispatch } from 'react-redux';
 import { registerUserAction } from '../../services/actions';
+import { SyntheticEvent } from "react";
+import { useAppDispatch } from "../../hooks/redux";
+import { IRegisterData } from "../../shared/types/types";
+
 
 function RegisterPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const registerFormInitialState = {
     name: '',
@@ -15,9 +18,17 @@ function RegisterPage() {
     password: '',
   }
 
-  const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(registerFormInitialState);
+  const {
+    values,
+    handleChange,
+    resetForm,
+    errors,
+    isValid,
+    setValues
+  } = useForm<IRegisterData>(registerFormInitialState);
 
-  const handleRegister = (event) => {
+
+  const handleRegister = (event: SyntheticEvent) => {
     event.preventDefault();
     dispatch(registerUserAction(values));
   }
@@ -45,8 +56,7 @@ function RegisterPage() {
             />
           </div>
           <div className={`mt-6 ${registrationStyles.inputWrapper}`}>
-            <PasswordInput placeholder={'Пароль'}
-                           onChange={handleChange}
+            <PasswordInput onChange={handleChange}
                            value={values.password}
                            name={'password'}
             />

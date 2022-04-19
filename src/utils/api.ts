@@ -1,17 +1,40 @@
+import { IIngredient, ILoginData, IRegisterData, IResetData, IUserData } from "../shared/types/types";
+
 const API_URL = 'https://norma.nomoreparties.space/api/';
 
-function processResponse(res) {
+function processResponse(res: Response) {
   if (res.ok) {
     return res.json();
   }
   /*return Promise.reject(`${res.status}`);*/
   return res.json()
       .then((errorRes) => {
-        return Promise.reject({status: res.status, ...errorRes})
+        return Promise.reject({ status: res.status, ...errorRes })
       })
 }
 
-const orderBurger = (burgerIngredientsId, token) => {
+interface IOrderBurger {
+  success: boolean,
+  name: string,
+  order: {
+    ingredients: Array<IIngredient>,
+    _id: string,
+    owner: {
+      name: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string
+    },
+    status: string,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+    number: number,
+    price: number
+  }
+}
+
+const orderBurger = (burgerIngredientsId: Array<string>, token: string): Promise<IOrderBurger> => {
   return fetch(`${API_URL}orders`, {
     method: "POST",
     headers: {
@@ -25,12 +48,27 @@ const orderBurger = (burgerIngredientsId, token) => {
       .then(processResponse)
 }
 
-const getIngredients = () => {
+interface IGetIngredients {
+  success: true,
+  data: Array<IIngredient>
+}
+
+const getIngredients = (): Promise<IGetIngredients> => {
   return fetch(`${API_URL}ingredients`)
       .then(processResponse)
 }
 
-const registerRequest = (registerData) => {
+interface IRegisterRequest {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  },
+  accessToken: string,
+  refreshToken: string
+}
+
+const registerRequest = (registerData: IRegisterData): Promise<IRegisterRequest> => {
   return fetch(`${API_URL}auth/register`, {
     method: "POST",
     headers: {
@@ -43,8 +81,17 @@ const registerRequest = (registerData) => {
       .then(processResponse)
 }
 
+interface ILoginRequest {
+  success: boolean,
+  accessToken: string,
+  refreshToken: string,
+  user: {
+    email: string,
+    name: string
+  }
+}
 
-const loginRequest = (loginData) => {
+const loginRequest = (loginData: ILoginData): Promise<ILoginRequest> => {
   return fetch(`${API_URL}auth/login`, {
     method: "POST",
     headers: {
@@ -57,7 +104,13 @@ const loginRequest = (loginData) => {
       .then(processResponse)
 }
 
-const updateTokenRequest = (token) => {
+interface IUpdateTokenRequest {
+  success: boolean,
+  accessToken: string,
+  refreshToken: string
+}
+
+const updateTokenRequest = (token: string): Promise<IUpdateTokenRequest> => {
   return fetch(`${API_URL}auth/token`, {
     method: "POST",
     headers: {
@@ -70,7 +123,12 @@ const updateTokenRequest = (token) => {
       .then(processResponse)
 }
 
-const logoutUserRequest = (token) => {
+interface ILogoutUserRequest {
+  success: boolean,
+  message: string
+}
+
+const logoutUserRequest = (token: string): Promise<ILogoutUserRequest> => {
   return fetch(`${API_URL}auth/logout`, {
     method: "POST",
     headers: {
@@ -83,7 +141,15 @@ const logoutUserRequest = (token) => {
       .then(processResponse)
 }
 
-const getUserDataRequest = (token) => {
+interface IGetUserDataRequest {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  }
+}
+
+const getUserDataRequest = (token: string): Promise<IGetUserDataRequest> => {
   return fetch(`${API_URL}auth/user`, {
     headers: {
       'authorization': `Bearer ${token}`,
@@ -92,7 +158,15 @@ const getUserDataRequest = (token) => {
       .then(processResponse)
 };
 
-const updateUserDataRequest = (token, userData) => {
+interface IUpdateUserDataRequest {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  }
+}
+
+const updateUserDataRequest = (token: string, userData: IUserData): Promise<IUpdateUserDataRequest> => {
   return fetch(`${API_URL}auth/user`, {
     method: "PATCH",
     headers: {
@@ -106,7 +180,12 @@ const updateUserDataRequest = (token, userData) => {
       .then(processResponse)
 };
 
-const forgotPasswordRequest = (email) => {
+interface IForgotPasswordRequest {
+  success: boolean,
+  message: string
+}
+
+const forgotPasswordRequest = (email: string): Promise<IForgotPasswordRequest> => {
   return fetch(`${API_URL}password-reset`, {
     method: "POST",
     headers: {
@@ -119,7 +198,12 @@ const forgotPasswordRequest = (email) => {
       .then(processResponse)
 }
 
-const resetPasswordRequest = (resetData) => {
+interface IResetPasswordRequest {
+  success: boolean,
+  message: string
+}
+
+const resetPasswordRequest = (resetData: IResetData): Promise<IResetPasswordRequest> => {
   return fetch(`${API_URL}password-reset/reset`, {
     method: "POST",
     headers: {

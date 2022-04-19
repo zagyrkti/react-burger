@@ -1,11 +1,18 @@
 import styles from './constructor-topping-card.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useRef } from 'react';
+import React, { FC, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { IIngredient, TMoveCardHandler } from "../../shared/types/types";
 
-function ConstructorToppingCard({ ingredient, index, onClose, moveCard }) {
-  const ref = useRef(null);
+interface IConstructorToppingCard {
+  ingredient: IIngredient,
+  index: number,
+  onClose: (uuid: string) => void,
+  moveCard: TMoveCardHandler,
+}
 
+const ConstructorToppingCard: FC<IConstructorToppingCard> = ({ ingredient, index, onClose, moveCard }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ isHover }, drop] = useDrop({
 
@@ -16,9 +23,15 @@ function ConstructorToppingCard({ ingredient, index, onClose, moveCard }) {
         isHover: monitor.isOver(),
       };
     },
-
-    hover(item, monitor) {
+    /* хз как этот unknown item забороть вроде всю цепочку последовательно проверил */
+    /*то что существвует проверил то что обджект проверил то что ключ есть проверил, тип ключа проверил*/
+    /*все одно ts ошибку не снимает*/
+    /*сдался поставил any так или иначе проверка полная вроде*/
+    hover(item: any, monitor) {
       if (!ref.current) {
+        return;
+      }
+      if (!item || !(typeof item === 'object') || !('index' in item) || (typeof item.index !== 'number')) {
         return;
       }
       const dragIndex = item.index;
@@ -32,7 +45,7 @@ function ConstructorToppingCard({ ingredient, index, onClose, moveCard }) {
       // Get vertical middle
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       // Determine mouse position
-      const clientOffset = monitor.getClientOffset();
+      const clientOffset = monitor.getClientOffset()!;
       // Get pixels to the top
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       // Only perform the move when the mouse has crossed half of the items height

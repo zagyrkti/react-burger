@@ -3,26 +3,34 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { useDispatch, useSelector } from 'react-redux';
 import { forgotPasswordAction } from '../../services/actions';
-import { useEffect } from 'react';
+import { SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+
 
 function ForgotPasswordPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const isPasswordRecoveryEmailSent = useSelector((store) => store.user.isPasswordRecoveryEmailSent);
+  const isPasswordRecoveryEmailSent = useAppSelector((store) => store.user.isPasswordRecoveryEmailSent);
 
   const forgotPasswordFormInitialState = {
     email: '',
   }
 
-  const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(forgotPasswordFormInitialState);
+  const {
+    values,
+    handleChange,
+    resetForm,
+    errors,
+    isValid,
+    setValues
+  } = useForm(forgotPasswordFormInitialState, false);
 
-  const handlePasswordRecovery = async (event) => {
+  const handlePasswordRecovery = async (event: SyntheticEvent) => {
     event.preventDefault();
-    if(!isValid) {
+    if (!isValid || !values.email.length) {
       return;
     }
 
@@ -47,12 +55,13 @@ function ForgotPasswordPage() {
                    name={'email'}
                    size={'default'}
                    errorText={errors.email}
-                   error={!isValid}
-
+                   error={!isValid && !!values.email.length}
             />
           </div>
           <div className='mt-6'>
-            <Button type="primary" size="medium" disabled={!isValid}>Восстановить</Button>
+            <Button type="primary" size="medium"
+                    disabled={!isValid || !values.email.length}
+            >Восстановить</Button>
           </div>
 
           <RedirectCall className='mt-20'

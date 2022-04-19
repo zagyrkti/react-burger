@@ -1,8 +1,15 @@
 import styles from './redirect-call.module.css';
 import { Link } from 'react-router-dom';
+import { FC } from "react";
 
+interface IRedirectCall {
+  className: string,
+  message: string,
+  toPath: string,
+  toText: string
+}
 
-function RedirectCall(props) {
+const RedirectCall: FC<IRedirectCall> = (props) => {
   const style = props.className ? props.className : '';
 
   return (

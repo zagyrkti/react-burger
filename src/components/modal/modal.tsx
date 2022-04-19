@@ -1,14 +1,18 @@
 import styles from './modal.module.css';
-import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import React, {useCallback} from "react";
+import React, { FC, useCallback } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import disableScroll from 'disable-scroll';
 
-const modalRoot = document.getElementById("modal");
+const modalRoot = document.getElementById("modal")!;
 
-function Modal(props) {
+interface IModal {
+  onClose: () => void;
+}
+
+const Modal: FC<IModal> = (props) => {
 
   const { onClose } = props;
 
@@ -32,7 +36,7 @@ function Modal(props) {
   return ReactDOM.createPortal(
       <ModalOverlay onClick={props.onClose}>
         <div className={`${styles.modal}`}>
-          <span className={styles.closeButton}><CloseIcon type="primary" onClick={props.onClose}/></span>
+          <span className={styles.closeButton}><CloseIcon type="primary" onClick={props.onClose} /></span>
           {props.children}
         </div>
       </ModalOverlay>,
