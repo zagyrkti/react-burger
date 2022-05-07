@@ -1,0 +1,17 @@
+.feed {
+    padding: 0 8px 0 0;
+    max-width: 1248px;
+    width: 100%;
+    display: grid;
+    grid-gap: 0 56px;
+    grid-template-columns: minmax(0, 608px) 1fr;
+    margin: 0 auto 0 auto;
+}
+
+.header {
+    grid-column: span 2;
+}
+
+.orderList {
+    max-height: 812px;
+}

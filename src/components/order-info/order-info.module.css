@@ -1,0 +1,74 @@
+.orderInfo {
+    width: 640px;
+}
+
+.orderNumber {
+    text-align: center;
+}
+
+.ingredientList {
+    margin: 0;
+    padding: 5px 24px 0 0;
+    max-height: 320px;
+
+    overflow-y: auto;
+    list-style-type: none;
+}
+
+.ingredientList::-webkit-scrollbar-track {
+    border-radius: 6px;
+}
+
+.ingredientList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredientList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 0 solid #2F2F37;
+    border-radius: 6px;
+}
+
+.ingredientData {
+    display: flex;
+    align-items: center;
+}
+
+.ingredientWrapper {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    box-sizing: border-box;
+    flex: none;
+
+    overflow: hidden;
+    border: solid 2px transparent;
+    border-radius: 50%;
+    background-image: linear-gradient(#131316, #131316),
+    linear-gradient(45deg, #801AB2, #4C4CFF);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.ingredientImg {
+    box-sizing: border-box;
+    padding: 4px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.ingredientName {
+    max-width: 320px;
+}
+
+
+.price {
+    display: flex;
+    margin: 0 0 0 auto;
+}
+
+.totalDateWrapper {
+    display: flex;
+}

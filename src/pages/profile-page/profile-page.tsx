@@ -8,6 +8,7 @@ import { getUserDataAction, logoutUserAction, updateUserDataAction } from '../..
 import { getCookie } from '../../utils/cookies-auxiliary';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { IObjectKeysWithBoolean, TSetLinkStyle } from "../../shared/types/types";
+import OrderList from "../../components/order-list/order-list";
 
 interface IInputsDisableStatus extends IObjectKeysWithBoolean {
   name: boolean,
@@ -100,7 +101,7 @@ function ProfilePage() {
   return (
       <main className={styles.main}>
         <section className={styles.profile}>
-          <nav className={`${styles.nav} mr-15`}>
+          <nav className={`${styles.nav}`}>
             <NavLink end to='/profile' className={setLinkStyle}>
               Профиль
             </NavLink>
@@ -110,13 +111,16 @@ function ProfilePage() {
             <NavLink to='/profile/exit' className={setLinkStyle} onClick={handleExit}>
               Выход
             </NavLink>
+            <NavLink to='/profile/orders/sdfsdfs' className={setLinkStyle}>
+              order details
+            </NavLink>
             <p className={`text text_type_main-default mt-20 text_color_inactive ${styles.remark}`}>
               В этом разделе вы можете
               изменить свои персональные данные</p>
           </nav>
           <Routes>
             <Route path={'/'} element={
-              <section className={styles.userData}>
+              <section className={`${styles.userData} ml-15`}>
                 <form onSubmit={handleUpdateUserData}>
                   <div className={`${styles.inputWrapper}`}>
                     <Input type={'text'}
@@ -165,9 +169,9 @@ function ProfilePage() {
               </section>
             } />
             <Route path={'/orders'} element={
-              <p>
-                orders
-              </p>
+              <section className={`${styles.orderHistory} mt-9 ml-10 pt-2`}>
+                <OrderList orderHistory={true}/>
+              </section>
             } />
             <Route path={'/exit'} element={
               <section className={styles.exit}>

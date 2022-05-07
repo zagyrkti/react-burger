@@ -1,4 +1,5 @@
 .header {
+  min-width: 870px;
   display: flex;
   justify-content: center;
   background-color: var(--background);
@@ -40,4 +41,25 @@
 
 .item_pos_left {
   justify-self: flex-end;
+}
+
+.logoWrapper {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.logoWrapper svg {
+  position: relative;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+@media screen and (max-width: 1115px){
+  .logoWrapper {
+    height: 50px;
+    width: 50px;
+  }
 }

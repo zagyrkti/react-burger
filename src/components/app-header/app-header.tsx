@@ -18,25 +18,39 @@ function AppHeader() {
           <ul className={styles.list}>
             <li>
               <NavLink to='/' className={setLinkStyle}>
-                <BurgerIcon type="primary" />
-                <span className="ml-2">Конструктор</span>
+                {({ isActive }) => (
+                    <>
+                      <BurgerIcon type={isActive ? "primary" : "secondary"} />
+                      <span className="ml-2">Конструктор</span>
+                    </>
+                )}
               </NavLink>
             </li>
             <li className="ml-2">
-              <NavLink to='/orders' className={setLinkStyle}>
-                <ListIcon type="secondary" />
-                <span className="ml-2">Лента заказов</span>
+              <NavLink to='/feed' className={setLinkStyle}>
+                {({ isActive }) => (
+                    <>
+                      <ListIcon type={isActive ? "primary" : "secondary"} />
+                      <span className="ml-2">Лента заказов</span>
+                    </>
+                )}
               </NavLink>
             </li>
             <li className={`${styles.item_type_logo} mt-1`}>
               <NavLink to='/' className={styles.link}>
-                <Logo />
+                <div className={styles.logoWrapper}>
+                  <Logo />
+                </div>
               </NavLink>
             </li>
             <li className={styles.item_pos_left}>
               <NavLink to='/profile' className={setLinkStyle}>
-                <ProfileIcon type="secondary" />
-                <span className="ml-2">Личный кабинет</span>
+                {({ isActive }) => (
+                    <>
+                      <ProfileIcon type={isActive ? "primary" : "secondary"} />
+                      <span className="ml-2">Личный кабинет</span>
+                    </>
+                )}
               </NavLink>
             </li>
           </ul>

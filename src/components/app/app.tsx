@@ -20,6 +20,10 @@ import Modal from '../modal/modal';
 import ProtectedRoute from '../protected-route/protected-route';
 import { getCookie } from '../../utils/cookies-auxiliary';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import FeedPage from "../../pages/feed-page/feed-page";
+import OrderPage from "../../pages/order-page/order-page";
+import IngredientCard from "../ingredient-card/ingredient-card";
+import OrderInfo from "../order-info/order-info";
 
 interface ILocationState {
   backgroundLocation?: Location
@@ -63,6 +67,10 @@ function App() {
         <AppHeader />
         <Routes location={locationState.backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
+          <Route path='/feed' element={<FeedPage />} />
+          <Route path='/feed/:id' element={<OrderPage />} />
+
+
           <Route path='/login' element={
             <ProtectedRoute redirectTo={'/'} passCondition={!userData.name}>
               <LoginPage />
@@ -89,6 +97,7 @@ function App() {
               <ProfilePage />
             </ProtectedRoute>
           } />
+          <Route path='/profile/orders/:id' element={<OrderPage />} />
           <Route path='/ingredients/:id' element={<IngredientPage />} />
         </Routes>
 
@@ -96,7 +105,8 @@ function App() {
             <Routes>
               <Route path="/ingredients/:id" element={
                 <Modal onClose={handleIngredientDetailsClose}>
-                  <IngredientDetails />
+              {/*    <IngredientDetails />*/}
+                  <OrderInfo isPopup={true}/>
                 </Modal>
               } />
             </Routes>
