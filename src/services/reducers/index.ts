@@ -1,54 +1,136 @@
 import { combineReducers } from 'redux';
+
 import {
-  ADD_BUN_TO_CONSTRUCTOR,
-  ADD_INGREDIENT_TO_SELECTED,
-  ADD_TOPPING_TO_CONSTRUCTOR, FORGOT_PASSWORD_FAILED, FORGOT_PASSWORD_REQUEST, FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAILED,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  GET_USER_DATA_FAILED,
+  GET_USER_DATA_REQUEST,
+  GET_USER_DATA_SUCCESS, LOGIN_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGOUT_USER_FAILED,
+  LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, REGISTER_USER_FAILED, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS, UPDATE_TOKEN_FAILED, UPDATE_TOKEN_REQUEST, UPDATE_TOKEN_SUCCESS,
+  UPDATE_USER_DATA_FAILED,
+  UPDATE_USER_DATA_REQUEST,
+  UPDATE_USER_DATA_SUCCESS
+} from '../constants/user';
+import {
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
-  GET_INGREDIENTS_SUCCESS, GET_USER_DATA_FAILED, GET_USER_DATA_REQUEST, GET_USER_DATA_SUCCESS,
-  LOGIN_USER_FAILED,
-  LOGIN_USER_REQUEST,
-  LOGIN_USER_SUCCESS, LOGOUT_USER_FAILED,
-  LOGOUT_USER_REQUEST,
-  LOGOUT_USER_SUCCESS,
+  GET_INGREDIENTS_SUCCESS,
+  INITIAL_INGREDIENT
+} from '../constants/ingredients';
+import { ADD_INGREDIENT_TO_SELECTED, RESET_SELECTED_INGREDIENT } from '../constants/ingredient-details';
+import {
   PLACE_ORDER_FAILED,
   PLACE_ORDER_REQUEST,
   PLACE_ORDER_SUCCESS,
-  REGISTER_USER_FAILED,
-  REGISTER_USER_REQUEST,
-  REGISTER_USER_SUCCESS,
-  REMOVE_INGREDIENT_FROM_CONSTRUCTOR, RESET_PASSWORD_FAILED, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS,
-  RESET_SELECTED_INGREDIENT,
-  SWITCH_ORDER_DETAILS_MODAL_STATE,
-  UPDATE_TOKEN_FAILED,
-  UPDATE_TOKEN_REQUEST,
-  UPDATE_TOKEN_SUCCESS,
-  UPDATE_TOPPING_ORDER, UPDATE_USER_DATA_FAILED, UPDATE_USER_DATA_REQUEST, UPDATE_USER_DATA_SUCCESS
-} from '../actions';
+  SWITCH_ORDER_DETAILS_MODAL_STATE
+} from '../constants/order';
+import {
+  ADD_BUN_TO_CONSTRUCTOR,
+  ADD_TOPPING_TO_CONSTRUCTOR,
+  REMOVE_INGREDIENT_FROM_CONSTRUCTOR, UPDATE_TOPPING_ORDER
+} from '../constants/burger-constructor';
+import { TUserActions } from "../actions/user";
+import { IIngredient, IUserData, TOrderData } from "../../shared/types/types";
+import { TIngredientsActions } from "../actions/ingredients";
+import { TIngredientDetailsActions } from "../actions/ingredient-details";
+import { TOrderActions } from "../actions/order";
+import { IOrderBurger } from "../../utils/api";
+import { TBurgerConstructorActions } from "../actions/burger-constructor";
+import { TSocketActions } from "../actions/socket";
+import {
+  INITIAL_ORDER_MESSAGE,
+  WS_CONNECTION_CLOSED,
+  WS_CONNECTION_ERROR,
+  WS_GET_MESSAGE,
+  WS_INIT_CONNECTION,
+  WS_ON_OPEN
+} from "../constants/socket";
 
-const initialState = {
+
+type TUserState = {
+  userData: IUserData,
+  isPasswordRecoveryEmailSent: boolean,
+  isRequestSent: boolean,
+  isRequestFailed: boolean,
+}
+
+type TIngredientsState = {
+  ingredients: Array<IIngredient>,
+  isRequestSent: boolean,
+  isRequestFailed: boolean,
+}
+
+type TIngredientDetailsState = {
+  selectedIngredient: IIngredient
+}
+
+type TOrderState = {
+  orderDetails: IOrderBurger,
+  isRequestSent: boolean,
+  isRequestFailed: boolean,
+  isModalOpen: boolean,
+}
+
+type TBurgerConstructorState = {
+  bun: IIngredient,
+  topping: Array<IIngredient>,
+}
+
+type TSocketState = {
+  connecting: boolean,
+  connected: boolean,
+  message: TOrderData,
+}
+
+type TInitialState = {
+  ingredients: TIngredientsState,
+  IngredientDetails: TIngredientDetailsState,
+  order: TOrderState,
+  burgerConstructor: TBurgerConstructorState,
+  user: TUserState,
+  socket: TSocketState,
+}
+
+const initialState : TInitialState = {
   ingredients: {
     ingredients: [],
     isRequestSent: false,
     isRequestFailed: false,
   },
   IngredientDetails: {
-    selectedIngredient: {},
+    selectedIngredient: INITIAL_INGREDIENT,
   },
   order: {
     orderDetails: {
+      success: false,
       name: '...loading',
       order: {
+        ingredients: [],
+        _id: '',
+        owner: {
+          name: '',
+          email: '',
+          createdAt: '',
+          updatedAt: ''
+        },
+        status: '',
+        name: '',
+        createdAt: '',
+        updatedAt: '',
         number: null,
-      },
-      success: false
+        price: null
+      }
     },
     isRequestSent: false,
     isRequestFailed: false,
     isModalOpen: false,
   },
   burgerConstructor: {
-    bun: {},
+    bun: INITIAL_INGREDIENT,
     topping: [],
   },
   user: {
@@ -60,9 +142,55 @@ const initialState = {
     isRequestSent: false,
     isRequestFailed: false,
   },
+  socket: {
+    connecting: false,
+    connected: false,
+    message: INITIAL_ORDER_MESSAGE,
+  }
 }
 
-const user = (state = initialState.user, action) => {
+const socket = (state = initialState.socket, action: TSocketActions): TSocketState => {
+  switch (action.type) {
+    case WS_INIT_CONNECTION:
+      return {
+        ...state,
+        connecting: true,
+        connected: false
+      };
+
+    case WS_ON_OPEN:
+      return {
+        ...state,
+        connecting: false,
+        connected: true
+      };
+
+    case WS_CONNECTION_ERROR:
+      return {
+        ...state,
+        connecting: false,
+        connected: false
+      };
+
+    case WS_CONNECTION_CLOSED:
+      return {
+        ...state,
+        connected: false,
+        message: INITIAL_ORDER_MESSAGE
+      };
+
+    case WS_GET_MESSAGE:
+      return {
+        ...state,
+        message: action.payload
+      };
+
+    default:
+      return state;
+  }
+}
+
+const user = (state = initialState.user, action : TUserActions) : TUserState => {
   switch (action.type) {
     case RESET_PASSWORD_REQUEST:
       return {
@@ -232,7 +360,7 @@ const user = (state = initialState.user, action) => {
   }
 }
 
-const ingredients = (state = initialState.ingredients, action) => {
+const ingredients = (state = initialState.ingredients, action : TIngredientsActions) : TIngredientsState => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST:
       return {
@@ -259,7 +387,7 @@ const ingredients = (state = initialState.ingredients, action) => {
   }
 }
 
-const ingredientDetails = (state = initialState.IngredientDetails, action) => {
+const ingredientDetails = (state = initialState.IngredientDetails, action : TIngredientDetailsActions) : TIngredientDetailsState => {
   switch (action.type) {
     case ADD_INGREDIENT_TO_SELECTED:
       return {
@@ -269,14 +397,14 @@ const ingredientDetails = (state = initialState.IngredientDetails, action) => {
     case RESET_SELECTED_INGREDIENT:
       return {
         ...state,
-        selectedIngredient: {}
+        selectedIngredient: INITIAL_INGREDIENT
       }
     default:
       return state;
   }
 }
 
-const order = (state = initialState.order, action) => {
+const order = (state = initialState.order, action : TOrderActions) : TOrderState => {
   switch (action.type) {
     case PLACE_ORDER_REQUEST:
       return {
@@ -310,7 +438,7 @@ const order = (state = initialState.order, action) => {
   }
 }
 
-const burgerConstructor = (state = initialState.burgerConstructor, action) => {
+const burgerConstructor = (state = initialState.burgerConstructor, action : TBurgerConstructorActions) : TBurgerConstructorState => {
   switch (action.type) {
     case ADD_TOPPING_TO_CONSTRUCTOR:
       return {
@@ -325,7 +453,7 @@ const burgerConstructor = (state = initialState.burgerConstructor, action) => {
     case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
       return {
         ...state,
-        topping: state.topping.filter((ingredient) => ingredient.uuid !== action.payload),
+        topping: state.topping.filter((ingredient : IIngredient) => ingredient.uuid !== action.payload),
       }
     case UPDATE_TOPPING_ORDER:
       return {
@@ -338,6 +466,7 @@ const burgerConstructor = (state = initialState.burgerConstructor, action) => {
 }
 
 const rootReducer = combineReducers({
+  socket,
   ingredients,
   ingredientDetails,
   order,

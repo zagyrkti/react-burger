@@ -13,7 +13,7 @@ function processResponse(res: Response) {
       })
 }
 
-interface IOrderBurger {
+export interface IOrderBurger {
   success: boolean,
   name: string,
   order: {
@@ -29,12 +29,12 @@ interface IOrderBurger {
     name: string,
     createdAt: string,
     updatedAt: string,
-    number: number,
-    price: number
+    number: number | null,
+    price: number | null
   }
 }
 
-const orderBurger = (burgerIngredientsId: Array<string>, token: string): Promise<IOrderBurger> => {
+const orderBurger = (burgerIngredientsId: Array<string | number>, token: string): Promise<IOrderBurger> => {
   return fetch(`${API_URL}orders`, {
     method: "POST",
     headers: {

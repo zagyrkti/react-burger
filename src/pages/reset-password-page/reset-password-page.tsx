@@ -4,7 +4,7 @@ import registrationStyles from '../../components/registration/registration.modul
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
 import { SyntheticEvent, useState } from 'react';
-import { resetPasswordAction } from '../../services/actions';
+import { resetPasswordAction } from '../../services/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from "../../hooks/redux";
 

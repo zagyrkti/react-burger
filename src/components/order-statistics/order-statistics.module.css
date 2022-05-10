@@ -17,10 +17,31 @@
 .statusList {
     margin: 0;
     padding: 0;
-    max-height: 160px;
+    max-width: 412px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+/*    grid-template-rows: repeat(25, min-content);*/
+    /*grid-gap: 0 12px;*/
+  /*  grid-auto-flow: column;*/
+    /*max-height: 160px;*/
+    max-height: 320px;
     line-height: 24px;
     overflow-y: auto;
     list-style-type: none;
+}
+
+.statusList::-webkit-scrollbar-track {
+    border-radius: 6px;
+}
+
+.statusList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.statusList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 0 solid #2F2F37;
+    border-radius: 6px;
 }
 
 .statusItem {

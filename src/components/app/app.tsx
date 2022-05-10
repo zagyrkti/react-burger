@@ -3,12 +3,6 @@ import './app.module.css';
 import AppHeader from "../app-header/app-header";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ConstructorPage from "../../pages/constructor-page/constructor-page";
-import {
-  getIngredientsAction,
-  getUserDataAction,
-  RESET_SELECTED_INGREDIENT,
-  updateTokenAction
-} from '../../services/actions';
 import LoginPage from '../../pages/login-page/login-page';
 import ForgotPasswordPage from '../../pages/forgot-password-page/forgot-password-page';
 import ResetPasswordPage from '../../pages/reset-password-page/reset-password-page';
@@ -22,8 +16,10 @@ import { getCookie } from '../../utils/cookies-auxiliary';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import FeedPage from "../../pages/feed-page/feed-page";
 import OrderPage from "../../pages/order-page/order-page";
-import IngredientCard from "../ingredient-card/ingredient-card";
 import OrderInfo from "../order-info/order-info";
+import { getUserDataAction, updateTokenAction } from "../../services/actions/user";
+import { getIngredientsAction } from "../../services/actions/ingredients";
+import { RESET_SELECTED_INGREDIENT } from "../../services/constants/ingredient-details";
 
 interface ILocationState {
   backgroundLocation?: Location
@@ -97,7 +93,11 @@ function App() {
               <ProfilePage />
             </ProtectedRoute>
           } />
-          <Route path='/profile/orders/:id' element={<OrderPage />} />
+          <Route path='/profile/orders/:id' element={
+            <ProtectedRoute redirectTo={'/login'} passCondition={!!userData.name}>
+              <OrderPage />
+            </ProtectedRoute>
+          } />
           <Route path='/ingredients/:id' element={<IngredientPage />} />
         </Routes>
 
@@ -105,7 +105,16 @@ function App() {
             <Routes>
               <Route path="/ingredients/:id" element={
                 <Modal onClose={handleIngredientDetailsClose}>
-              {/*    <IngredientDetails />*/}
+                  <IngredientDetails />
+                </Modal>
+              } />
+              <Route path="/feed/:id" element={
+                <Modal onClose={handleIngredientDetailsClose}>
+                  <OrderInfo isPopup={true}/>
+                </Modal>
+              } />
+              <Route path="/profile/orders/:id" element={
+                <Modal onClose={handleIngredientDetailsClose}>
                   <OrderInfo isPopup={true}/>
                 </Modal>
               } />

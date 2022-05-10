@@ -1,5 +1,6 @@
 .orderInfo {
     width: 640px;
+    z-index: 1000;
 }
 
 .orderNumber {
@@ -8,7 +9,7 @@
 
 .ingredientList {
     margin: 0;
-    padding: 5px 24px 0 0;
+    padding: 0 24px 0 0;
     max-height: 320px;
 
     overflow-y: auto;

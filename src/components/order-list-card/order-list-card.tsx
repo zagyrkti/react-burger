@@ -1,65 +1,93 @@
 import styles from './order-list-card.module.css'
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
+import { IIngredient, TIdifiedIngredients, TOrder } from "../../shared/types/types";
+import { dateToOrderFormat, getOrderStatus } from "../../utils/auxiliary";
+import { Link, useLocation } from "react-router-dom";
 
-const ingredients = [
-  "https://code.s3.yandex.net/react/code/bun-01-mobile.png",
-  "https://code.s3.yandex.net/react/code/sauce-04-mobile.png",
-  "https://code.s3.yandex.net/react/code/sauce-01-mobile.png",
-  "https://code.s3.yandex.net/react/code/meat-01-mobile.png",
-  "https://code.s3.yandex.net/react/code/meat-02-mobile.png",
+interface IOrderListCard {
+  idifiedIngredients: TIdifiedIngredients,
+  order: TOrder,
+  className?: string,
+  showStatus?: boolean
+}
 
-  "https://code.s3.yandex.net/react/code/sauce-03-mobile.png",
-  "https://code.s3.yandex.net/react/code/sauce-03-mobile.png",
-]
+function OrderListCard({ idifiedIngredients, order, className, showStatus }: IOrderListCard) {
+  const location = useLocation();
 
-
-function OrderListCard({ className, showStatus }: { className?: string, showStatus?: boolean }) {
-
-  const ingredientsToRender = ingredients.map((item, index) => {
-    if (index > 5) {
-      return null;
-    }
-    if (index < 5) {
-      return (
-          <div className={styles.ingredientWrapper} key={index}>
-            <img className={styles.ingredient} src={item} alt="ingredient" />
-          </div>
-      )
-    }
-    return (
-        <div className={styles.ingredientWrapper} key={index}>
-          <div className={`${styles.ingredientsHiddenNumber} text text_type_main-default`}>
-            {`+${ingredients.length - index}`}
-          </div>
-          <img className={styles.ingredient} src={item} alt="ingredient" />
-        </div>
-    )
+  const orderIngredientsData: Array<IIngredient> = order.ingredients.map((id: string) => {
+    return idifiedIngredients[id]
   })
+
+  const bun: Array<IIngredient> = [];
+  const topping: Array<IIngredient> = []
+
+  orderIngredientsData.forEach((item) => {
+    item?.type === 'bun' ? bun.push(item) : topping.push(item)
+  })
+
+  const conformedWithRenderFormatOrderIngredientsData = bun.length ? [bun[0], ...topping] : topping
+
+  const total = orderIngredientsData.reduce((accumulator, item) => {
+    if (item?.price) {
+      return accumulator + item.price
+    }
+    return 0
+  }, 0)
+
+  const ingredientImagesToRender =
+      conformedWithRenderFormatOrderIngredientsData.map((item, index) => {
+        if (index > 5) {
+          return null;
+        }
+        if (index < 5) {
+          return (
+              <div className={styles.ingredientWrapper} key={index}>
+                <img className={styles.ingredient} src={item?.image_mobile} alt="ingredient" />
+              </div>
+          )
+        }
+        return (
+            <div className={styles.ingredientWrapper} key={index}>
+              <div className={`${styles.ingredientsHiddenNumber} text text_type_main-default`}>
+                {`+${orderIngredientsData.length - index}`}
+              </div>
+              <img className={styles.ingredient} src={item?.image_mobile} alt="ingredient" />
+            </div>
+        )
+      })
+
+  const date = dateToOrderFormat(order?.createdAt);
+  const orderStatus = getOrderStatus(order?.status);
 
   return (
       <div className={`${styles.orderListCard} ${className}`}>
-        <div className='p-6'>
+        <Link to={`${location.pathname}/${order._id}`}
+              state={{ backgroundLocation: location, orderData: {idifiedIngredients, order, total, date}}}
+              className={`${styles.link} p-6`}
+        >
           <div className={styles.orderInfo}>
-            <p className='text text_type_digits-default'>#034535</p>
-            <p className='text text_type_main-default text_color_inactive'>Сегодня, 16:20 i-GMT+3</p>
+            <p className='text text_type_digits-default'>{`#${order.number}`}</p>
+            <p className='text text_type_main-default text_color_inactive'>{date}</p>
           </div>
-          <h3 className='text text_type_main-medium mt-6'>Death Star Starship Main бургер</h3>
+          <h3 className='text text_type_main-medium mt-6'>{order.name}</h3>
           {showStatus &&
-            <p className={`text text_type_main-default text_color_success mt-2`}>Выполнен</p>
+              <p className={`text text_type_main-default mt-2 ${order?.status === 'done' ? 'text_color_success' : ''}`}>
+                {orderStatus}
+              </p>
           }
           <div className={`mt-6 ${styles.ingredientsPriceWrapper}`}>
             <div className={styles.ingredientList}>
               {
-                ingredientsToRender
+                ingredientImagesToRender
               }
             </div>
             <div className={styles.priceWrapper}>
-              <span className='text text_type_digits-default mr-2'>480</span>
+              <span className='text text_type_digits-default mr-2'>{total}</span>
               <CurrencyIcon type="primary" />
             </div>
           </div>
-        </div>
+        </Link>
       </div>
   )
 }

@@ -3,7 +3,7 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { forgotPasswordAction } from '../../services/actions';
+import { forgotPasswordAction } from '../../services/actions/user';
 import { SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 function ForgotPasswordPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
 
   const isPasswordRecoveryEmailSent = useAppSelector((store) => store.user.isPasswordRecoveryEmailSent);
 

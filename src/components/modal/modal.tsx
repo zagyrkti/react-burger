@@ -24,11 +24,11 @@ const Modal: FC<IModal> = (props) => {
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleCloseByEsc);
-    disableScroll.on();
+    /*disableScroll.on();*/
 
     return () => {
       document.removeEventListener("keydown", handleCloseByEsc);
-      disableScroll.off();
+      /*disableScroll.off();*/
     }
   }, [handleCloseByEsc])
 

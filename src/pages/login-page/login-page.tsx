@@ -4,7 +4,7 @@ import RedirectCall from '../../components/redirect-call/redirect-call';
 import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css'
 import { useDispatch } from 'react-redux';
-import { loginUserAction } from '../../services/actions';
+import { loginUserAction } from '../../services/actions/user';
 import { SyntheticEvent } from "react";
 import { ILoginData } from "../../shared/types/types";
 

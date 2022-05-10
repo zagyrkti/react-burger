@@ -1,5 +1,6 @@
 .feed {
     padding: 0 8px 0 0;
+    min-width: 1160px;
     max-width: 1248px;
     width: 100%;
     display: grid;

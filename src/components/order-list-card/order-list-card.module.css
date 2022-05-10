@@ -3,6 +3,12 @@
     border-radius: 40px;
 }
 
+.link {
+    display: block;
+    color: #F2F2F3;
+    text-decoration: none;
+}
+
 .orderInfo {
     display: flex;
     justify-content: space-between;
