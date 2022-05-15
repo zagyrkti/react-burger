@@ -1,91 +1,20 @@
 import styles from './profile-page.module.css';
 import { NavLink } from 'react-router-dom';
 import { Route, Routes } from "react-router-dom";
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import useForm from '../../utils/useForm';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { getUserDataAction, logoutUserAction, updateUserDataAction } from '../../services/actions';
+import React from 'react';
+import { logoutUserAction } from '../../services/actions/user';
 import { getCookie } from '../../utils/cookies-auxiliary';
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { IObjectKeysWithBoolean, TSetLinkStyle } from "../../shared/types/types";
-
-interface IInputsDisableStatus extends IObjectKeysWithBoolean {
-  name: boolean,
-  email: boolean,
-}
+import { useAppDispatch } from "../../hooks/redux";
+import { TSetLinkStyle } from "../../shared/types/types";
+import ProfileForm from "../../components/profile-form/profile-form";
+import OrderHistory from "../../components/order-history/order-history";
 
 function ProfilePage() {
   const dispatch = useAppDispatch();
 
-  const userData = useAppSelector((store) => store.user.userData);
-
-  const registerFormInitialState = {
-    name: 'debugger',
-    email: 'debugger@gmail.com',
-    password: '',
-  }
-
-  const { values, handleChange, resetForm, errors, isValid, setValues } = useForm(registerFormInitialState);
-
-  const inputsInitialState = {
-    name: true,
-    email: true,
-  }
-
-  const [inputsDisableStatus, setInputsDisableStatus] = useState<IInputsDisableStatus>(inputsInitialState);
-
-  const handleIconClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (event.currentTarget?.parentElement?.children[1].tagName === 'INPUT') {
-      const input = event.currentTarget?.parentElement?.children[1] as HTMLInputElement
-      const inputName = input.name
-      setInputsDisableStatus((prevState) => (
-          { ...prevState, [inputName]: !inputsDisableStatus[inputName] })
-      )
-      setTimeout(() => input.focus(), 0)
-    }
-  }
-
-
   const handleExit = () => {
     dispatch(logoutUserAction(getCookie('refreshToken')))
   }
-
-  const handleGetUserData = () => {
-    dispatch(getUserDataAction(getCookie('token')));
-  }
-
-  const handleUpdateUserData = (event: SyntheticEvent) => {
-    event.preventDefault();
-
-    const updatedUserData = {
-      name: values.name,
-      email: values.email
-    }
-
-    dispatch(updateUserDataAction(getCookie('token'), updatedUserData));
-    setInputsDisableStatus(inputsInitialState)
-  }
-
-  const handleChancelBtnClick = () => {
-    setInputsDisableStatus(inputsInitialState)
-    setValues({
-      name: userData.name,
-      email: userData.email,
-      password: '',
-    })
-  }
-
-  useEffect(() => {
-    setValues({
-      name: userData.name,
-      email: userData.email,
-      password: '',
-    })
-  }, [userData])
-
-  useEffect(() => {
-    handleGetUserData();
-  }, [])
 
   const setLinkStyle: TSetLinkStyle = ({ isActive }) => {
     return isActive
@@ -93,14 +22,10 @@ function ProfilePage() {
         : `text text_type_main-medium text_color_inactive ${styles.link}`
   }
 
-  const isButtonsShown =
-      userData.name !== values.name
-      || userData.email !== values.email
-
   return (
       <main className={styles.main}>
         <section className={styles.profile}>
-          <nav className={`${styles.nav} mr-15`}>
+          <nav className={`${styles.nav}`}>
             <NavLink end to='/profile' className={setLinkStyle}>
               Профиль
             </NavLink>
@@ -116,58 +41,12 @@ function ProfilePage() {
           </nav>
           <Routes>
             <Route path={'/'} element={
-              <section className={styles.userData}>
-                <form onSubmit={handleUpdateUserData}>
-                  <div className={`${styles.inputWrapper}`}>
-                    <Input type={'text'}
-                           placeholder={'Имя'}
-                           onChange={handleChange}
-                           value={values.name}
-                           name={'name'}
-                           size={'default'}
-                           icon={inputsDisableStatus.name ? 'EditIcon' : 'CheckMarkIcon'}
-                           onIconClick={handleIconClick}
-                           disabled={inputsDisableStatus.name}
-
-                    />
-                  </div>
-                  <div className={`mt-6 ${styles.inputWrapper}`}>
-                    <Input type={'text'}
-                           placeholder={'E-mail'}
-                           onChange={handleChange}
-                           value={values.email}
-                           name={'email'}
-                           size={'default'}
-                           icon={inputsDisableStatus.email ? 'EditIcon' : 'CheckMarkIcon'}
-                           onIconClick={handleIconClick}
-                           disabled={inputsDisableStatus.email}
-
-                    />
-                  </div>
-                  <div className={`mt-6 ${styles.inputWrapper}`}>
-                    <PasswordInput onChange={handleChange}
-                                   value={values.password}
-                                   name={'password'}
-                    />
-                  </div>
-                  {isButtonsShown &&
-                      <div className={styles.buttons}>
-                        <div className='mt-6'>
-                          <Button type="secondary" size="medium" htmlType='button'
-                                  onClick={handleChancelBtnClick}>Отмена</Button>
-                        </div>
-                        <div className='mt-6'>
-                          <Button type="primary" size="medium">Сохранить</Button>
-                        </div>
-                      </div>
-                  }
-                </form>
+              <section className={`${styles.userData} ml-15`}>
+                <ProfileForm />
               </section>
             } />
-            <Route path={'/orders'} element={
-              <p>
-                orders
-              </p>
+            <Route path={'/orders/*'} element={
+              <OrderHistory />
             } />
             <Route path={'/exit'} element={
               <section className={styles.exit}>

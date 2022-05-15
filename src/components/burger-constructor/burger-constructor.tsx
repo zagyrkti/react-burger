@@ -9,12 +9,14 @@ import { useDrop } from 'react-dnd';
 import ConstructorToppingCard from '../constructor-topping-card/constructor-topping-card';
 import {
   ADD_BUN_TO_CONSTRUCTOR, ADD_TOPPING_TO_CONSTRUCTOR, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  placeOrderAction, SWITCH_ORDER_DETAILS_MODAL_STATE, UPDATE_TOPPING_ORDER,
-} from '../../services/actions';
+ UPDATE_TOPPING_ORDER,
+} from '../../services/constants/burger-constructor';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../../utils/cookies-auxiliary';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { IIngredient, IUserData, TMoveCardHandler } from "../../shared/types/types";
+import { SWITCH_ORDER_DETAILS_MODAL_STATE } from "../../services/constants/order";
+import { placeOrderAction } from "../../services/actions/order";
 
 type TOnDropHandler = (data: { ingredient: IIngredient }) => void;
 

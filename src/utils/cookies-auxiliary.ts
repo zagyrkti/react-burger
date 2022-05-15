@@ -51,7 +51,7 @@ export function setCookie(name: string, value: string, props?: { expires?: numbe
     }
   }
 
-  document.cookie = updatedCookie;
+  document.cookie = `${updatedCookie}; path=/`;
 }
 
 export function deleteCookie(name: string) {

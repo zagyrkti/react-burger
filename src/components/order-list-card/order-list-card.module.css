@@ -1,0 +1,92 @@
+.orderListCard {
+    background-color: #1C1C21;
+    border-radius: 40px;
+}
+
+.link {
+    display: block;
+    color: #F2F2F3;
+    text-decoration: none;
+}
+
+.orderInfo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ingredientsPriceWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ingredientList {
+    display: flex;
+}
+
+.ingredientWrapper {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    margin: 0 -16px 0 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: solid 2px transparent;
+    border-radius: 50%;
+    background-image: linear-gradient(#131316, #131316),
+    linear-gradient(45deg, #801AB2, #4C4CFF);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.ingredientWrapper:nth-child(1) {
+    z-index: 10;
+}
+
+
+.ingredientWrapper:nth-child(2) {
+    z-index: 9;
+}
+
+.ingredientWrapper:nth-child(3) {
+    z-index: 8;
+}
+
+.ingredientWrapper:nth-child(4) {
+    z-index: 7;
+}
+
+.ingredientWrapper:nth-child(5) {
+    z-index: 6;
+}
+
+.ingredientWrapper:nth-child(6) {
+    z-index: 5;
+}
+
+.ingredientsHiddenNumber {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(28, 28, 33, 0.6);
+}
+
+
+.ingredient {
+    box-sizing: border-box;
+    padding: 4px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.priceWrapper {
+    display: flex;
+}
+

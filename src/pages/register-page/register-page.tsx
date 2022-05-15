@@ -3,7 +3,7 @@ import Registration from '../../components/registration/registration';
 import registrationStyles from '../../components/registration/registration.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import RedirectCall from '../../components/redirect-call/redirect-call';
-import { registerUserAction } from '../../services/actions';
+import { registerUserAction } from '../../services/actions/user';
 import { SyntheticEvent } from "react";
 import { useAppDispatch } from "../../hooks/redux";
 import { IRegisterData } from "../../shared/types/types";

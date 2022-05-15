@@ -3,12 +3,6 @@ import './app.module.css';
 import AppHeader from "../app-header/app-header";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ConstructorPage from "../../pages/constructor-page/constructor-page";
-import {
-  getIngredientsAction,
-  getUserDataAction,
-  RESET_SELECTED_INGREDIENT,
-  updateTokenAction
-} from '../../services/actions';
 import LoginPage from '../../pages/login-page/login-page';
 import ForgotPasswordPage from '../../pages/forgot-password-page/forgot-password-page';
 import ResetPasswordPage from '../../pages/reset-password-page/reset-password-page';
@@ -20,6 +14,12 @@ import Modal from '../modal/modal';
 import ProtectedRoute from '../protected-route/protected-route';
 import { getCookie } from '../../utils/cookies-auxiliary';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import FeedPage from "../../pages/feed-page/feed-page";
+import OrderPage from "../../pages/order-page/order-page";
+import OrderInfo from "../order-info/order-info";
+import { getUserDataAction, updateTokenAction } from "../../services/actions/user";
+import { getIngredientsAction } from "../../services/actions/ingredients";
+import { RESET_SELECTED_INGREDIENT } from "../../services/constants/ingredient-details";
 
 interface ILocationState {
   backgroundLocation?: Location
@@ -63,6 +63,10 @@ function App() {
         <AppHeader />
         <Routes location={locationState.backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
+          <Route path='/feed' element={<FeedPage />} />
+          <Route path='/feed/:id' element={<OrderPage />} />
+
+
           <Route path='/login' element={
             <ProtectedRoute redirectTo={'/'} passCondition={!userData.name}>
               <LoginPage />
@@ -89,6 +93,11 @@ function App() {
               <ProfilePage />
             </ProtectedRoute>
           } />
+          <Route path='/profile/orders/:id' element={
+            <ProtectedRoute redirectTo={'/login'} passCondition={!!userData.name}>
+              <OrderPage />
+            </ProtectedRoute>
+          } />
           <Route path='/ingredients/:id' element={<IngredientPage />} />
         </Routes>
 
@@ -97,6 +106,16 @@ function App() {
               <Route path="/ingredients/:id" element={
                 <Modal onClose={handleIngredientDetailsClose}>
                   <IngredientDetails />
+                </Modal>
+              } />
+              <Route path="/feed/:id" element={
+                <Modal onClose={handleIngredientDetailsClose}>
+                  <OrderInfo isPopup={true}/>
+                </Modal>
+              } />
+              <Route path="/profile/orders/:id" element={
+                <Modal onClose={handleIngredientDetailsClose}>
+                  <OrderInfo isPopup={true}/>
                 </Modal>
               } />
             </Routes>

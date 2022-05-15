@@ -2,7 +2,7 @@ import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-c
 import React, { FC, useMemo } from "react";
 import styles from './ingredient-card.module.css';
 import { useDrag } from 'react-dnd';
-import { ADD_INGREDIENT_TO_SELECTED } from '../../services/actions';
+import { ADD_INGREDIENT_TO_SELECTED } from '../../services/constants/ingredient-details';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { IIngredient } from "../../shared/types/types";

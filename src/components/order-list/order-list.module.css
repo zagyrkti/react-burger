@@ -1,0 +1,23 @@
+.orderList {
+    /*display: flex;*/
+    box-sizing: border-box;
+    width: 100%;
+    max-height: inherit;
+    overflow-y: auto;
+}
+
+
+.orderList::-webkit-scrollbar-track {
+    margin: 0 0 68px 0;
+    border-radius: 6px;
+}
+
+.orderList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orderList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 0 solid #2F2F37;
+    border-radius: 6px;
+}

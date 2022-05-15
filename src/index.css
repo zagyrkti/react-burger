@@ -1,10 +1,15 @@
-@import '~@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
+/*@import '~@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
 @import '~@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
-@import '~@ya.praktikum/react-developer-burger-ui-components/dist/ui/fonts/fonts.css';
+@import '~@ya.praktikum/react-developer-burger-ui-components/dist/ui/fonts/fonts.css';*/
 
+.body {
+  color: #F2F2F3;
+  /*min-width: 1350px;*/
+}
 
 /*
 * {
   outline: 1px dashed blueviolet;
 }
 */
+

@@ -44,3 +44,22 @@ export interface IResetData {
   password: string,
   token: string,
 }
+
+export type TOrder = {
+  "_id": string,
+  "ingredients": Array<string>,
+  "status": string,
+  "name": string,
+  "createdAt": string,
+  "updatedAt": string,
+  "number": number
+}
+
+export type TOrderData = {
+  "success": boolean,
+  "orders": Array<TOrder>,
+  "total": number,
+  "totalToday": number
+}
+
+export type TIdifiedIngredients = {[key: string]: IIngredient}
