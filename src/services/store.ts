@@ -36,3 +36,4 @@ export type TAppDispatchWithThunk = typeof store.dispatch | TAppThunk
 
 
 export default store;
+

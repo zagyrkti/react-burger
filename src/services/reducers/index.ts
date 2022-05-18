@@ -88,20 +88,20 @@ type TSocketState = {
 
 type TInitialState = {
   ingredients: TIngredientsState,
-  IngredientDetails: TIngredientDetailsState,
+  ingredientDetails: TIngredientDetailsState,
   order: TOrderState,
   burgerConstructor: TBurgerConstructorState,
   user: TUserState,
   socket: TSocketState,
 }
 
-const initialState : TInitialState = {
+export const initialState : TInitialState = {
   ingredients: {
     ingredients: [],
     isRequestSent: false,
     isRequestFailed: false,
   },
-  IngredientDetails: {
+  ingredientDetails: {
     selectedIngredient: INITIAL_INGREDIENT,
   },
   order: {
@@ -387,7 +387,7 @@ const ingredients = (state = initialState.ingredients, action : TIngredientsActi
   }
 }
 
-const ingredientDetails = (state = initialState.IngredientDetails, action : TIngredientDetailsActions) : TIngredientDetailsState => {
+const ingredientDetails = (state = initialState.ingredientDetails, action : TIngredientDetailsActions) : TIngredientDetailsState => {
   switch (action.type) {
     case ADD_INGREDIENT_TO_SELECTED:
       return {
