@@ -124,7 +124,7 @@ function BurgerConstructor() {
 
   return (
       <section className={`${styles.burgerConstructor} mt-20 pl-4`}>
-        <div className={`${styles.constructedBurger} ${constructedBurgerTargeted} pt-5 pb-5`} ref={dropTarget}>
+        <div className={`${styles.constructedBurger} ${constructedBurgerTargeted} pt-5 pb-5`} ref={dropTarget} data-test='burger-constructor_drop-target'>
           <div className={`pl-7 ${styles.bunWrapper}`}>
             {!!bun.type &&
                 <ConstructorElement type="top"
@@ -173,7 +173,7 @@ function BurgerConstructor() {
         </div>
 
         <div className={`${styles.info} mt-5 pr-4`}>
-          <span className="text text_type_digits-medium mr-2">{total}</span>
+          <span className="text text_type_digits-medium mr-2" data-test='burger-constructor_total'>{total}</span>
           <img src={currencyIconBig} alt="" />
           <span className="pr-10"> </span>
           <Button type="primary" size="large" onClick={handleOrder}>

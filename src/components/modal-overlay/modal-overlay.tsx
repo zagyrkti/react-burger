@@ -16,7 +16,7 @@ const ModalOverlay: FC<IModalOverlay> = ({ onClick, children }) => {
   }
 
   return (
-      <div className={styles.modalOverlay} onClick={onOverlayClick} ref={modalOverlayRef}>
+      <div className={styles.modalOverlay} onClick={onOverlayClick} ref={modalOverlayRef} data-test='modal-overlay'>
         {children}
       </div>
   );

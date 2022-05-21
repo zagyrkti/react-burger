@@ -7,9 +7,10 @@
   /*min-width: 1350px;*/
 }
 
-/*
-* {
+.body::-webkit-scrollbar-corner { background: #8585AD; }
+
+
+/** {
   outline: 1px dashed blueviolet;
-}
-*/
+}*/
 

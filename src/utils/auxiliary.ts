@@ -7,7 +7,7 @@ dayjs.extend(isLeapYear);
 dayjs.extend(dayOfYear);
 
 
-function getDaysFromToday(number: number) {
+function getFormattedDaysSinceDate(number: number) {
   let n = number
   if (n === 0) {
     return 'Сегодня'
@@ -82,7 +82,7 @@ function dateToOrderFormat(time: string) {
   const date = new Date(time);/*?*/
   const dateNow = new Date();/*?*/
 
-  let formattedDaysFrom = getDaysFromToday(daysSinceDate);/*?*/
+  let formattedDaysFrom = getFormattedDaysSinceDate(daysSinceDate);/*?*/
 
   const orderTimeHours = date.getHours().toString().padStart(2, '0');/*?*/
   const orderTimeMinutes = date.getMinutes().toString().padStart(2, '0');/*?*/
