@@ -99,7 +99,6 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/ingredients/:id' element={<IngredientPage />} />
-          <Route path='*' element={<IngredientPage />} />
         </Routes>
 
         {locationState.backgroundLocation && (
