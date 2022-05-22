@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename='/react-burger'>
           <App />
         </BrowserRouter>
       </Provider>
