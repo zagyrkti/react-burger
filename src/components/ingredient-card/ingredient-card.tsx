@@ -47,6 +47,7 @@ const IngredientCard: FC<IIngredientCard> = (props) => {
             className={`${styles.ingredientCard} mt-6 text_color_primary`}
             onClick={handleIngredientClick}
             ref={dragRef}
+            data-test='ingredient-card'
       >
         {!!counter && <Counter count={counter} size="default" />}
         <img src={ingredient.image} alt="" className={`${styles.ingredientImage} pl-4 pr-4`} />

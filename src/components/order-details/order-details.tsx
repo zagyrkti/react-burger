@@ -12,7 +12,7 @@ function OrderDetails() {
 
   return (
       <>
-        <div className={`${styles.orderDetails} pt-30 pb-30 pl-25 pr-25`}>
+        <div className={`${styles.orderDetails} pt-30 pb-30 pl-25 pr-25`} data-test='order-modal'>
           {isRequestSent &&
               <>
                 <span className={`${styles.orderId} text text_type_digits-large`}>....</span>

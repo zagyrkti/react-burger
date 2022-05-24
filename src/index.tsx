@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import store from './services/store';
 import { BrowserRouter } from 'react-router-dom';
 
+/*TODO middleware token refresh, reconnect*/
+/*TODO add more interactivity*/
 
 ReactDOM.render(
     <React.StrictMode>

@@ -1,6 +1,13 @@
 import { IIngredient, TIdifiedIngredients } from "../shared/types/types";
 
-function getDaysFromToday(number: number) {
+const dayjs = require('dayjs')
+const dayOfYear = require('dayjs/plugin/dayOfYear')
+const isLeapYear = require('dayjs/plugin/isLeapYear')
+dayjs.extend(isLeapYear);
+dayjs.extend(dayOfYear);
+
+
+function getFormattedDaysSinceDate(number: number) {
   let n = number
   if (n === 0) {
     return 'Сегодня'
@@ -29,22 +36,53 @@ function getTimezoneOffset(date: Date) {
   return sign + (offset / 60);
 }
 
+function getDaysSinceDate(sinceDate: string, baseDate?: string) {
+  const dayjsOrderDate = dayjs(sinceDate);
+  const dayjsNow = baseDate ? dayjs(baseDate): dayjs();
+  const yearOrder = dayjsOrderDate.year();/*?*/
+  const yearNow = dayjsNow.year();/*?*/
+
+  let differenceDays = 0
+
+  if (yearNow === yearOrder) {
+    differenceDays = dayjsNow.dayOfYear() - dayjsOrderDate.dayOfYear();
+  } else {
+    differenceDays += dayjsNow.dayOfYear();
+    for (let loopYear = yearOrder; loopYear < yearNow; loopYear++) {
+      const isLeap = dayjs(`${loopYear}-01-01`).isLeapYear()
+
+      if (loopYear === yearOrder) {
+        if (isLeap) {
+          differenceDays += 366 - dayjsOrderDate.dayOfYear();
+        } else {
+          differenceDays += 365 - dayjsOrderDate.dayOfYear();
+        }
+        continue;
+      }
+
+      if (isLeap) {
+        differenceDays += 366;
+      } else {
+        differenceDays += 365;
+      }
+    }
+  }
+
+  return differenceDays;
+}
+
 function dateToOrderFormat(time: string) {
-  if(!time) {
+  if (!time) {
     return ''
   }
 
+  const daysSinceDate = getDaysSinceDate(time);
+
+/*"2022-01-01T05:55:59.831Z  "2022-01-01T05:55:59.831Z""*/
   const date = new Date(time);/*?*/
   const dateNow = new Date();/*?*/
-  let differenceDays = 0;
-  if (dateNow.getMonth() === date.getMonth() && dateNow.getUTCFullYear() === date.getUTCFullYear()) {
-    differenceDays = Math.abs(dateNow.getDay() - date.getDay());/*?*/
-  } else {
-    differenceDays = Math.abs(Math.floor((dateNow.getTime() - date.getTime()) / (60 * 60 * 24 * 1000)));
-  }
 
-
-  let formattedDaysFrom = getDaysFromToday(differenceDays);/*?*/
+  let formattedDaysFrom = getFormattedDaysSinceDate(daysSinceDate);/*?*/
 
   const orderTimeHours = date.getHours().toString().padStart(2, '0');/*?*/
   const orderTimeMinutes = date.getMinutes().toString().padStart(2, '0');/*?*/
@@ -55,8 +93,8 @@ function dateToOrderFormat(time: string) {
   return `${formattedDaysFrom}, ${formattedOrderTime} i-GMT${timeZone}`
 }
 
-/*const time = "2022-05-08T21:11:49.442Z"
-const from = dateToOrderFormat(time)/!*?*!/*/
+/*const time = "2020-05-19T20:55:59.831"
+const from = dateToOrderFormat(time)*//*?*/
 
 function getOrderStatus(status: string) {
   switch (status) {
@@ -83,4 +121,5 @@ export {
   dateToOrderFormat,
   getOrderStatus,
   getIdifiedIngredients,
+  getDaysSinceDate,
 }
